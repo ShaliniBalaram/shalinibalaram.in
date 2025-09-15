@@ -1,5 +1,5 @@
 export const SITE = {
-  website: "https://shalinibalaram.in/", // replace this with your deployed domain
+  website: "https://shalinibalaram.in/", // your custom domain
   author: "Shalini B",
   profile: "https://shalinibalaram.in/",
   desc: "Personal website of Shalini B - Civil Engineer & Water Resources Researcher",
