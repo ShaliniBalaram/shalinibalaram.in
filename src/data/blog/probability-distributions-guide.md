@@ -172,6 +172,10 @@ Understanding these parameter behaviors is just as important as knowing the math
 
 Now that you understand the theory, let's explore these distributions hands-on! Use the tool below to adjust parameters and see how each distribution changes in real-time. This is exactly the kind of exploration that helped me understand distributions when I was recreating those 80s papers.
 
+<div id="js-status" style="padding: 1rem; margin: 1rem 0; border-radius: 6px; background: #fee; border: 1px solid #fcc; color: #800;">
+  ⚠️ JavaScript is loading... If this message persists, there may be an issue with the interactive plot.
+</div>
+
 <div id="distribution-explorer">
   <div class="controls-panel">
     <div class="distribution-selector">
@@ -497,8 +501,14 @@ class DistributionExplorer {
 function testDistributionExplorer() {
     console.log('Testing Distribution Explorer...');
     const canvas = document.getElementById('pdf-plot');
+    const statusDiv = document.getElementById('js-status');
+
     if (!canvas) {
         console.error('Canvas not found!');
+        if (statusDiv) {
+            statusDiv.innerHTML = '❌ Error: Canvas element not found. Please refresh the page.';
+            statusDiv.style.background = '#fdd';
+        }
         return false;
     }
 
@@ -506,9 +516,21 @@ function testDistributionExplorer() {
     try {
         const explorer = new DistributionExplorer();
         console.log('Distribution Explorer initialized successfully!');
+
+        // Update status to success
+        if (statusDiv) {
+            statusDiv.innerHTML = '✅ Interactive plot loaded successfully! Try changing the parameters below.';
+            statusDiv.style.background = '#dfd';
+            statusDiv.style.borderColor = '#bdb';
+            statusDiv.style.color = '#040';
+        }
         return true;
     } catch (error) {
         console.error('Error initializing Distribution Explorer:', error);
+        if (statusDiv) {
+            statusDiv.innerHTML = `❌ Error loading interactive plot: ${error.message}`;
+            statusDiv.style.background = '#fdd';
+        }
         return false;
     }
 }
