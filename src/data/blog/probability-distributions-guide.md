@@ -200,171 +200,174 @@ Now that you understand the theory, let's explore these distributions hands-on! 
 
 This hands-on exploration is the best way to develop intuition for which distribution fits your data!
 
-<script>
-// Simple interactive plot
-let currentParams = { mu: 0, sigma: 1 };
-
-function normalPDF(x, mu, sigma) {
-    return (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
-}
-
-function drawPlot() {
-    const canvas = document.getElementById('pdf-plot');
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height);
-
-    // Set up ranges
-    const xMin = currentParams.mu - 4 * currentParams.sigma;
-    const xMax = currentParams.mu + 4 * currentParams.sigma;
-    const points = 200;
-
-    // Calculate PDF values
-    const data = [];
-    let yMax = 0;
-    for (let i = 0; i <= points; i++) {
-        const x = xMin + (xMax - xMin) * i / points;
-        const y = normalPDF(x, currentParams.mu, currentParams.sigma);
-        data.push([x, y]);
-        if (y > yMax) yMax = y;
-    }
-
-    // Set up scaling
-    const margin = 50;
-    const plotWidth = width - 2 * margin;
-    const plotHeight = height - 2 * margin;
-
-    function scaleX(x) {
-        return margin + (x - xMin) / (xMax - xMin) * plotWidth;
-    }
-
-    function scaleY(y) {
-        return height - margin - (y / yMax) * plotHeight;
-    }
-
-    // Draw axes
-    ctx.strokeStyle = '#666';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(margin, height - margin);
-    ctx.lineTo(width - margin, height - margin);
-    ctx.moveTo(margin, margin);
-    ctx.lineTo(margin, height - margin);
-    ctx.stroke();
-
-    // Draw curve
-    ctx.strokeStyle = '#dc2626';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    data.forEach((point, i) => {
-        const x = scaleX(point[0]);
-        const y = scaleY(point[1]);
-        if (i === 0) {
-            ctx.moveTo(x, y);
-        } else {
-            ctx.lineTo(x, y);
-        }
-    });
-    ctx.stroke();
-
-    // Fill under curve
-    ctx.fillStyle = 'rgba(220, 38, 38, 0.1)';
-    ctx.beginPath();
-    ctx.moveTo(scaleX(xMin), scaleY(0));
-    data.forEach(point => {
-        ctx.lineTo(scaleX(point[0]), scaleY(point[1]));
-    });
-    ctx.lineTo(scaleX(xMax), scaleY(0));
-    ctx.closePath();
-    ctx.fill();
-
-    // Labels
-    ctx.fillStyle = '#333';
-    ctx.font = '14px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('Normal Distribution PDF', width / 2, 25);
-    ctx.fillText('x', width / 2, height - 10);
-}
-
-function updateParams() {
-    const muSlider = document.getElementById('mu-slider');
-    const sigmaSlider = document.getElementById('sigma-slider');
-    const muValue = document.getElementById('mu-value');
-    const sigmaValue = document.getElementById('sigma-value');
-    const equation = document.getElementById('equation-display');
-
-    if (muSlider && sigmaSlider) {
-        currentParams.mu = parseFloat(muSlider.value);
-        currentParams.sigma = parseFloat(sigmaSlider.value);
-
-        if (muValue) muValue.textContent = currentParams.mu;
-        if (sigmaValue) sigmaValue.textContent = currentParams.sigma;
-
-        if (equation) {
-            equation.innerHTML = `<strong>PDF:</strong> f(x) = (1/(${currentParams.sigma}√(2π))) × exp(-(x-${currentParams.mu})²/(2×${currentParams.sigma}²))`;
-        }
-
-        drawPlot();
-    }
-}
-
-function initPlot() {
-    const statusDiv = document.getElementById('js-status');
-    const canvas = document.getElementById('pdf-plot');
-
-    if (!canvas) {
-        if (statusDiv) {
-            statusDiv.innerHTML = '❌ Canvas not found';
-            statusDiv.style.background = '#fdd';
-        }
-        return;
-    }
-
-    try {
-        // Set up controls
+<script is:inline>
+(function() {
+    function initializeWhenReady() {
+        // Check if elements exist
+        const canvas = document.getElementById('pdf-plot');
+        const statusDiv = document.getElementById('js-status');
         const controls = document.getElementById('param-controls');
-        if (controls) {
+
+        if (!canvas || !statusDiv || !controls) {
+            setTimeout(initializeWhenReady, 100);
+            return;
+        }
+
+        // Update status immediately
+        statusDiv.innerHTML = '⚙️ Initializing interactive plot...';
+        statusDiv.style.background = '#ffd';
+
+        try {
+            // Global variables
+            window.plotParams = { mu: 0, sigma: 1 };
+
+            // Normal PDF calculation
+            window.normalPDF = function(x, mu, sigma) {
+                return (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+            };
+
+            // Drawing function
+            window.drawNormalPlot = function() {
+                const ctx = canvas.getContext('2d');
+                const width = canvas.width;
+                const height = canvas.height;
+
+                // Clear
+                ctx.clearRect(0, 0, width, height);
+
+                // Calculate range
+                const mu = window.plotParams.mu;
+                const sigma = window.plotParams.sigma;
+                const xMin = mu - 4 * sigma;
+                const xMax = mu + 4 * sigma;
+
+                // Generate points
+                const points = 200;
+                const data = [];
+                let yMax = 0;
+
+                for (let i = 0; i <= points; i++) {
+                    const x = xMin + (xMax - xMin) * i / points;
+                    const y = window.normalPDF(x, mu, sigma);
+                    data.push([x, y]);
+                    if (y > yMax) yMax = y;
+                }
+
+                // Scaling
+                const margin = 50;
+                const plotWidth = width - 2 * margin;
+                const plotHeight = height - 2 * margin;
+
+                function scaleX(x) {
+                    return margin + (x - xMin) / (xMax - xMin) * plotWidth;
+                }
+
+                function scaleY(y) {
+                    return height - margin - (y / yMax) * plotHeight;
+                }
+
+                // Draw axes
+                ctx.strokeStyle = '#666';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+
+                // Draw curve
+                ctx.strokeStyle = '#dc2626';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                for (let i = 0; i < data.length; i++) {
+                    const x = scaleX(data[i][0]);
+                    const y = scaleY(data[i][1]);
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.stroke();
+
+                // Fill area
+                ctx.fillStyle = 'rgba(220, 38, 38, 0.1)';
+                ctx.beginPath();
+                ctx.moveTo(scaleX(xMin), scaleY(0));
+                for (let i = 0; i < data.length; i++) {
+                    ctx.lineTo(scaleX(data[i][0]), scaleY(data[i][1]));
+                }
+                ctx.lineTo(scaleX(xMax), scaleY(0));
+                ctx.closePath();
+                ctx.fill();
+
+                // Title
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 16px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('Normal Distribution PDF', width / 2, 25);
+                ctx.fillText('x', width / 2, height - 15);
+            };
+
+            // Update function
+            window.updatePlotParams = function() {
+                const muSlider = document.getElementById('mu-slider');
+                const sigmaSlider = document.getElementById('sigma-slider');
+                const muValue = document.getElementById('mu-value');
+                const sigmaValue = document.getElementById('sigma-value');
+                const equation = document.getElementById('equation-display');
+
+                if (muSlider && sigmaSlider) {
+                    window.plotParams.mu = parseFloat(muSlider.value);
+                    window.plotParams.sigma = parseFloat(sigmaSlider.value);
+
+                    if (muValue) muValue.textContent = window.plotParams.mu;
+                    if (sigmaValue) sigmaValue.textContent = window.plotParams.sigma;
+
+                    if (equation) {
+                        equation.innerHTML = `<strong>Current PDF:</strong> f(x) = (1/(${window.plotParams.sigma}√(2π))) × exp(-(x-${window.plotParams.mu})²/(2×${window.plotParams.sigma}²))`;
+                    }
+
+                    window.drawNormalPlot();
+                }
+            };
+
+            // Set up controls
             controls.innerHTML = `
                 <div class="param-control">
                     <label>μ (Mean): <span id="mu-value">0</span></label>
-                    <input type="range" id="mu-slider" min="-3" max="3" step="0.1" value="0">
+                    <input type="range" id="mu-slider" min="-3" max="3" step="0.1" value="0" oninput="window.updatePlotParams()">
                 </div>
                 <div class="param-control">
                     <label>σ (Std Dev): <span id="sigma-value">1</span></label>
-                    <input type="range" id="sigma-slider" min="0.1" max="2.5" step="0.1" value="1">
+                    <input type="range" id="sigma-slider" min="0.1" max="2.5" step="0.1" value="1" oninput="window.updatePlotParams()">
                 </div>
             `;
 
-            document.getElementById('mu-slider').addEventListener('input', updateParams);
-            document.getElementById('sigma-slider').addEventListener('input', updateParams);
-        }
+            // Initial draw
+            window.updatePlotParams();
 
-        updateParams();
-
-        if (statusDiv) {
-            statusDiv.innerHTML = '✅ Interactive Normal Distribution plot ready! Try the sliders.';
+            // Success message
+            statusDiv.innerHTML = '✅ Interactive plot ready! Adjust the sliders to see the distribution change.';
             statusDiv.style.background = '#dfd';
             statusDiv.style.borderColor = '#bdb';
             statusDiv.style.color = '#040';
-        }
 
-    } catch (error) {
-        if (statusDiv) {
-            statusDiv.innerHTML = `❌ Error: ${error.message}`;
+        } catch (error) {
+            statusDiv.innerHTML = `❌ Error initializing plot: ${error.message}`;
             statusDiv.style.background = '#fdd';
+            console.error('Plot initialization error:', error);
         }
     }
-}
 
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(initPlot, 100);
-});
+    // Start initialization
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeWhenReady);
+    } else {
+        initializeWhenReady();
+    }
+})();
 </script>
 
 <style>
