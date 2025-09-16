@@ -59,11 +59,23 @@ $$f(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\righ
 
 **When to use:** When your data is symmetric around a central value, like measurement errors or natural phenomena affected by many small random factors.
 
+**Simple Example:**
+For a standard normal distribution (μ=0, σ=1):
+- **PDF at x=0**: f(0) = 1/√(2π) ≈ 0.399 (peak of the curve)
+- **PDF at x=1**: f(1) = (1/√(2π)) × e^(-0.5) ≈ 0.242
+- **CDF at x=0**: F(0) = 0.5 (50% of data below the mean)
+- **CDF at x=1**: F(1) ≈ 0.841 (84.1% of data below x=1)
+
 **Example scenarios:**
 - **Standard Normal (μ=0, σ=1)**: The classic reference distribution
 - **Measurement errors (μ=0, σ=0.1)**: Tight precision around true value
 - **Height data (μ=170, σ=10)**: Population height in centimeters
 - **Wider spread (μ=0, σ=2)**: More variability, flatter curve
+
+**Key References:**
+- De Moivre, A. (1738). *The Doctrine of Chances* - First derivation of the normal curve
+- Gauss, C.F. (1809). *Theoria motus corporum coelestium* - Method of least squares and normal distribution
+- Laplace, P.S. (1812). *Théorie analytique des probabilités* - Central limit theorem foundation
 
 ---
 
@@ -88,11 +100,23 @@ $$F(x) = 1 - e^{-\lambda x}$$
 
 **When to use:** For modeling waiting times, survival analysis, or any process where the probability of an event is constant over time.
 
+**Simple Example:**
+For an exponential distribution with λ=1:
+- **PDF at x=0**: f(0) = 1 × e^0 = 1.0 (highest point at zero)
+- **PDF at x=1**: f(1) = 1 × e^(-1) ≈ 0.368 (about 37% of the peak)
+- **CDF at x=0**: F(0) = 1 - e^0 = 0 (no events by time 0)
+- **CDF at x=1**: F(1) = 1 - e^(-1) ≈ 0.632 (63.2% of events by time 1)
+
 **Example scenarios:**
 - **Fast events (λ=3)**: High frequency, steep decline - like frequent website clicks
 - **Moderate rate (λ=1)**: Standard exponential - typical machine failures
 - **Slow events (λ=0.5)**: Gradual decline - rare geological events
 - **Very rare (λ=0.1)**: Almost flat - long-term reliability studies
+
+**Key References:**
+- Poisson, S.D. (1837). *Recherches sur la probabilité des jugements* - First systematic study
+- Feller, W. (1968). *An Introduction to Probability Theory and Its Applications* - Modern treatment
+- Cox, D.R. (1962). *Renewal Theory* - Applications in reliability engineering
 
 ---
 
@@ -115,11 +139,23 @@ $$f(x) = \frac{k}{\lambda}\left(\frac{x}{\lambda}\right)^{k-1}\exp\left(-\left(\
 
 **When to use:** Reliability engineering, wind speed analysis, extreme weather events. It's incredibly versatile!
 
+**Simple Example:**
+For a Weibull distribution with k=2, λ=1 (Rayleigh distribution):
+- **PDF at x=0**: f(0) = 2 × 0 × e^0 = 0 (starts at zero)
+- **PDF at x=1**: f(1) = 2 × 1 × e^(-1) ≈ 0.736 (near the peak)
+- **CDF at x=0**: F(0) = 1 - e^0 = 0 (no failures by time 0)
+- **CDF at x=1**: F(1) = 1 - e^(-1) ≈ 0.632 (63.2% failures by time 1)
+
 **Example scenarios:**
 - **Decreasing failure (k=0.5, λ=1)**: Early failures common, then stable
 - **Exponential-like (k=1, λ=1)**: Constant failure rate over time
 - **Normal-like (k=3.6, λ=1)**: Bell-shaped, approaching normal distribution
 - **Aging effect (k=4, λ=1)**: Increasing failure rate - wear-out phase
+
+**Key References:**
+- Weibull, W. (1951). *A Statistical Distribution Function of Wide Applicability* - Original paper
+- Fisher, R.A. & Tippett, L.H.C. (1928). *Limiting forms of the frequency distribution* - Extreme value theory
+- Gumbel, E.J. (1958). *Statistics of Extremes* - Comprehensive treatment of extreme value distributions
 
 ---
 
@@ -143,11 +179,23 @@ $$f(x) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} x^{\alpha-1} \exp(-\beta x)$$
 
 **When to use:** Rainfall amounts, waiting times for multiple events, insurance claims, or any positive continuous data with a right skew.
 
+**Simple Example:**
+For a gamma distribution with α=2, β=1:
+- **PDF at x=0**: f(0) = 1 × 0 × e^0 = 0 (starts at zero)
+- **PDF at x=1**: f(1) = 1 × 1 × e^(-1) ≈ 0.368 (peak value)
+- **CDF at x=0**: F(0) = 0 (no values below zero)
+- **CDF at x=2**: F(2) = 1 - 3e^(-2) ≈ 0.594 (59.4% below x=2)
+
 **Example scenarios:**
 - **J-shaped (α=0.5, β=1)**: Starts at infinity, many small values
 - **Exponential-like (α=1, β=1)**: Identical to exponential distribution
 - **Right-skewed (α=2, β=1)**: Common shape for positive data
 - **More symmetric (α=5, β=1)**: Higher shape approaches normal
+
+**Key References:**
+- Euler, L. (1729). *Commentarii academiae scientiarum Petropolitanae* - First gamma function definition
+- Pearson, K. (1895). *Contributions to the Mathematical Theory of Evolution* - Gamma distribution in statistics
+- Amoroso, L. (1925). *Ricerche intorno alla curva dei redditi* - Generalized gamma distribution
 
 ---
 
@@ -178,7 +226,18 @@ Now that you understand the theory, let's explore these distributions hands-on! 
 
 <div id="distribution-explorer">
   <div class="controls-panel">
-    <h3>Interactive Normal Distribution</h3>
+    <h3>Interactive Distribution Explorer</h3>
+
+    <div class="distribution-selector">
+      <label>Choose Distribution:</label>
+      <select id="distribution-type" onchange="window.switchDistribution()">
+        <option value="normal">Normal Distribution</option>
+        <option value="exponential">Exponential Distribution</option>
+        <option value="weibull">Weibull Distribution</option>
+        <option value="gamma">Gamma Distribution</option>
+      </select>
+    </div>
+
     <div class="parameter-controls" id="param-controls">
       <!-- Parameters will be populated by JavaScript -->
     </div>
@@ -194,16 +253,16 @@ Now that you understand the theory, let's explore these distributions hands-on! 
 </div>
 
 **Try this:**
-- **Change μ (mean)**: See how the curve shifts left and right
-- **Change σ (standard deviation)**: Watch how the curve gets wider or narrower
-- **Try extreme values**: μ=3, σ=0.5 vs μ=0, σ=2
+- **Switch between distributions**: See how different distributions behave
+- **Adjust parameters**: Watch how each parameter affects the shape
+- **Compare extreme values**: Try λ=0.5 vs λ=3 for exponential, or k=0.5 vs k=4 for Weibull
+- **Notice the patterns**: How do distributions relate to each other?
 
 This hands-on exploration is the best way to develop intuition for which distribution fits your data!
 
 <script is:inline>
 (function() {
     function initializeWhenReady() {
-        // Check if elements exist
         const canvas = document.getElementById('pdf-plot');
         const statusDiv = document.getElementById('js-status');
         const controls = document.getElementById('param-controls');
@@ -213,47 +272,93 @@ This hands-on exploration is the best way to develop intuition for which distrib
             return;
         }
 
-        // Update status immediately
-        statusDiv.innerHTML = '⚙️ Initializing interactive plot...';
+        statusDiv.innerHTML = '⚙️ Initializing interactive plots...';
         statusDiv.style.background = '#ffd';
 
         try {
-            // Global variables
-            window.plotParams = { mu: 0, sigma: 1 };
-
-            // Normal PDF calculation
-            window.normalPDF = function(x, mu, sigma) {
-                return (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+            // Global state
+            window.currentDistribution = 'normal';
+            window.plotParams = {
+                normal: { mu: 0, sigma: 1 },
+                exponential: { lambda: 1 },
+                weibull: { k: 2, lambda: 1 },
+                gamma: { alpha: 2, beta: 1 }
             };
 
-            // Drawing function
-            window.drawNormalPlot = function() {
+            // PDF functions
+            window.distributions = {
+                normal: {
+                    pdf: (x, params) => {
+                        const { mu, sigma } = params;
+                        return (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+                    },
+                    range: (params) => [params.mu - 4 * params.sigma, params.mu + 4 * params.sigma],
+                    title: (params) => `Normal Distribution (μ=${params.mu}, σ=${params.sigma})`,
+                    equation: (params) => `f(x) = (1/(${params.sigma}√(2π))) × exp(-(x-${params.mu})²/(2×${params.sigma}²))`
+                },
+                exponential: {
+                    pdf: (x, params) => {
+                        if (x < 0) return 0;
+                        return params.lambda * Math.exp(-params.lambda * x);
+                    },
+                    range: (params) => [0, 5 / params.lambda],
+                    title: (params) => `Exponential Distribution (λ=${params.lambda})`,
+                    equation: (params) => `f(x) = ${params.lambda} × e^(-${params.lambda}x), x ≥ 0`
+                },
+                weibull: {
+                    pdf: (x, params) => {
+                        if (x < 0) return 0;
+                        const { k, lambda } = params;
+                        return (k / lambda) * Math.pow(x / lambda, k - 1) * Math.exp(-Math.pow(x / lambda, k));
+                    },
+                    range: (params) => [0, 3 * params.lambda],
+                    title: (params) => `Weibull Distribution (k=${params.k}, λ=${params.lambda})`,
+                    equation: (params) => `f(x) = (${params.k}/${params.lambda}) × (x/${params.lambda})^${params.k-1} × e^(-(x/${params.lambda})^${params.k})`
+                },
+                gamma: {
+                    pdf: (x, params) => {
+                        if (x < 0) return 0;
+                        const { alpha, beta } = params;
+                        // Simplified gamma function approximation for common integer values
+                        const gamma = (n) => {
+                            if (n === 0.5) return Math.sqrt(Math.PI);
+                            if (n === 1) return 1;
+                            if (n === 2) return 1;
+                            if (n === 3) return 2;
+                            if (n === 4) return 6;
+                            if (n === 5) return 24;
+                            return Math.exp(n * Math.log(n) - n + 0.5 * Math.log(2 * Math.PI / n));
+                        };
+                        return (Math.pow(beta, alpha) / gamma(alpha)) * Math.pow(x, alpha - 1) * Math.exp(-beta * x);
+                    },
+                    range: (params) => [0, 5 / params.beta],
+                    title: (params) => `Gamma Distribution (α=${params.alpha}, β=${params.beta})`,
+                    equation: (params) => `f(x) = (${params.beta}^${params.alpha}/Γ(${params.alpha})) × x^${params.alpha-1} × e^(-${params.beta}x)`
+                }
+            };
+
+            // Generic drawing function
+            window.drawPlot = function() {
                 const ctx = canvas.getContext('2d');
                 const width = canvas.width;
                 const height = canvas.height;
+                const dist = window.distributions[window.currentDistribution];
+                const params = window.plotParams[window.currentDistribution];
 
-                // Clear
                 ctx.clearRect(0, 0, width, height);
 
-                // Calculate range
-                const mu = window.plotParams.mu;
-                const sigma = window.plotParams.sigma;
-                const xMin = mu - 4 * sigma;
-                const xMax = mu + 4 * sigma;
-
-                // Generate points
-                const points = 200;
+                const [xMin, xMax] = dist.range(params);
+                const points = 300;
                 const data = [];
                 let yMax = 0;
 
                 for (let i = 0; i <= points; i++) {
                     const x = xMin + (xMax - xMin) * i / points;
-                    const y = window.normalPDF(x, mu, sigma);
+                    const y = dist.pdf(x, params);
                     data.push([x, y]);
                     if (y > yMax) yMax = y;
                 }
 
-                // Scaling
                 const margin = 50;
                 const plotWidth = width - 2 * margin;
                 const plotHeight = height - 2 * margin;
@@ -275,6 +380,52 @@ This hands-on exploration is the best way to develop intuition for which distrib
                 ctx.moveTo(margin, margin);
                 ctx.lineTo(margin, height - margin);
                 ctx.stroke();
+
+                // Add tick marks and labels
+                ctx.fillStyle = '#666';
+                ctx.font = '12px monospace';
+                ctx.textAlign = 'center';
+
+                // X-axis ticks
+                const numXTicks = 8;
+                for (let i = 0; i <= numXTicks; i++) {
+                    const x = xMin + (xMax - xMin) * i / numXTicks;
+                    const pixelX = scaleX(x);
+
+                    ctx.beginPath();
+                    ctx.moveTo(pixelX, height - margin);
+                    ctx.lineTo(pixelX, height - margin + 5);
+                    ctx.stroke();
+
+                    ctx.fillText(x.toFixed(1), pixelX, height - margin + 18);
+                }
+
+                // Y-axis ticks
+                ctx.textAlign = 'right';
+                const numYTicks = 5;
+                for (let i = 0; i <= numYTicks; i++) {
+                    const y = (yMax * i) / numYTicks;
+                    const pixelY = scaleY(y);
+
+                    ctx.beginPath();
+                    ctx.moveTo(margin - 5, pixelY);
+                    ctx.lineTo(margin, pixelY);
+                    ctx.stroke();
+
+                    ctx.fillText(y.toFixed(3), margin - 8, pixelY + 4);
+                }
+
+                // Axis labels
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 14px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('x', width / 2, height - 5);
+
+                ctx.save();
+                ctx.translate(15, height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText('Probability Density', 0, 0);
+                ctx.restore();
 
                 // Draw curve
                 ctx.strokeStyle = '#dc2626';
@@ -306,62 +457,133 @@ This hands-on exploration is the best way to develop intuition for which distrib
                 ctx.fillStyle = '#333';
                 ctx.font = 'bold 16px monospace';
                 ctx.textAlign = 'center';
-                ctx.fillText('Normal Distribution PDF', width / 2, 25);
-                ctx.fillText('x', width / 2, height - 15);
+                ctx.fillText(dist.title(params), width / 2, 25);
             };
 
-            // Update function
-            window.updatePlotParams = function() {
-                const muSlider = document.getElementById('mu-slider');
-                const sigmaSlider = document.getElementById('sigma-slider');
-                const muValue = document.getElementById('mu-value');
-                const sigmaValue = document.getElementById('sigma-value');
-                const equation = document.getElementById('equation-display');
+            // Switch distribution function
+            window.switchDistribution = function() {
+                const selector = document.getElementById('distribution-type');
+                window.currentDistribution = selector.value;
+                window.setupControls();
+                window.updatePlot();
+            };
 
-                if (muSlider && sigmaSlider) {
-                    window.plotParams.mu = parseFloat(muSlider.value);
-                    window.plotParams.sigma = parseFloat(sigmaSlider.value);
+            // Setup controls for current distribution
+            window.setupControls = function() {
+                const dist = window.currentDistribution;
+                const params = window.plotParams[dist];
+                let controlsHTML = '';
 
-                    if (muValue) muValue.textContent = window.plotParams.mu;
-                    if (sigmaValue) sigmaValue.textContent = window.plotParams.sigma;
-
-                    if (equation) {
-                        equation.innerHTML = `<strong>Current PDF:</strong> f(x) = (1/(${window.plotParams.sigma}√(2π))) × exp(-(x-${window.plotParams.mu})²/(2×${window.plotParams.sigma}²))`;
-                    }
-
-                    window.drawNormalPlot();
+                if (dist === 'normal') {
+                    controlsHTML = `
+                        <div class="param-control">
+                            <label>μ (Mean): <span id="mu-value">${params.mu}</span></label>
+                            <input type="range" id="mu-slider" min="-3" max="3" step="0.1" value="${params.mu}" oninput="window.updatePlot()">
+                        </div>
+                        <div class="param-control">
+                            <label>σ (Std Dev): <span id="sigma-value">${params.sigma}</span></label>
+                            <input type="range" id="sigma-slider" min="0.1" max="2.5" step="0.1" value="${params.sigma}" oninput="window.updatePlot()">
+                        </div>
+                    `;
+                } else if (dist === 'exponential') {
+                    controlsHTML = `
+                        <div class="param-control">
+                            <label>λ (Rate): <span id="lambda-value">${params.lambda}</span></label>
+                            <input type="range" id="lambda-slider" min="0.1" max="3" step="0.1" value="${params.lambda}" oninput="window.updatePlot()">
+                        </div>
+                    `;
+                } else if (dist === 'weibull') {
+                    controlsHTML = `
+                        <div class="param-control">
+                            <label>k (Shape): <span id="k-value">${params.k}</span></label>
+                            <input type="range" id="k-slider" min="0.5" max="4" step="0.1" value="${params.k}" oninput="window.updatePlot()">
+                        </div>
+                        <div class="param-control">
+                            <label>λ (Scale): <span id="lambda-value">${params.lambda}</span></label>
+                            <input type="range" id="lambda-slider" min="0.5" max="2" step="0.1" value="${params.lambda}" oninput="window.updatePlot()">
+                        </div>
+                    `;
+                } else if (dist === 'gamma') {
+                    controlsHTML = `
+                        <div class="param-control">
+                            <label>α (Shape): <span id="alpha-value">${params.alpha}</span></label>
+                            <input type="range" id="alpha-slider" min="0.5" max="5" step="0.1" value="${params.alpha}" oninput="window.updatePlot()">
+                        </div>
+                        <div class="param-control">
+                            <label>β (Rate): <span id="beta-value">${params.beta}</span></label>
+                            <input type="range" id="beta-slider" min="0.1" max="3" step="0.1" value="${params.beta}" oninput="window.updatePlot()">
+                        </div>
+                    `;
                 }
+
+                controls.innerHTML = controlsHTML;
             };
 
-            // Set up controls
-            controls.innerHTML = `
-                <div class="param-control">
-                    <label>μ (Mean): <span id="mu-value">0</span></label>
-                    <input type="range" id="mu-slider" min="-3" max="3" step="0.1" value="0" oninput="window.updatePlotParams()">
-                </div>
-                <div class="param-control">
-                    <label>σ (Std Dev): <span id="sigma-value">1</span></label>
-                    <input type="range" id="sigma-slider" min="0.1" max="2.5" step="0.1" value="1" oninput="window.updatePlotParams()">
-                </div>
-            `;
+            // Update plot parameters and redraw
+            window.updatePlot = function() {
+                const dist = window.currentDistribution;
+                const params = window.plotParams[dist];
 
-            // Initial draw
-            window.updatePlotParams();
+                if (dist === 'normal') {
+                    const muSlider = document.getElementById('mu-slider');
+                    const sigmaSlider = document.getElementById('sigma-slider');
+                    if (muSlider && sigmaSlider) {
+                        params.mu = parseFloat(muSlider.value);
+                        params.sigma = parseFloat(sigmaSlider.value);
+                        document.getElementById('mu-value').textContent = params.mu;
+                        document.getElementById('sigma-value').textContent = params.sigma;
+                    }
+                } else if (dist === 'exponential') {
+                    const lambdaSlider = document.getElementById('lambda-slider');
+                    if (lambdaSlider) {
+                        params.lambda = parseFloat(lambdaSlider.value);
+                        document.getElementById('lambda-value').textContent = params.lambda;
+                    }
+                } else if (dist === 'weibull') {
+                    const kSlider = document.getElementById('k-slider');
+                    const lambdaSlider = document.getElementById('lambda-slider');
+                    if (kSlider && lambdaSlider) {
+                        params.k = parseFloat(kSlider.value);
+                        params.lambda = parseFloat(lambdaSlider.value);
+                        document.getElementById('k-value').textContent = params.k;
+                        document.getElementById('lambda-value').textContent = params.lambda;
+                    }
+                } else if (dist === 'gamma') {
+                    const alphaSlider = document.getElementById('alpha-slider');
+                    const betaSlider = document.getElementById('beta-slider');
+                    if (alphaSlider && betaSlider) {
+                        params.alpha = parseFloat(alphaSlider.value);
+                        params.beta = parseFloat(betaSlider.value);
+                        document.getElementById('alpha-value').textContent = params.alpha;
+                        document.getElementById('beta-value').textContent = params.beta;
+                    }
+                }
 
-            // Success message
-            statusDiv.innerHTML = '✅ Interactive plot ready! Adjust the sliders to see the distribution change.';
+                // Update equation display
+                const equation = document.getElementById('equation-display');
+                if (equation) {
+                    equation.innerHTML = `<strong>Current PDF:</strong> ${window.distributions[dist].equation(params)}`;
+                }
+
+                window.drawPlot();
+            };
+
+            // Initialize
+            window.setupControls();
+            window.updatePlot();
+
+            statusDiv.innerHTML = '✅ Interactive distribution explorer ready! Try switching between distributions and adjusting parameters.';
             statusDiv.style.background = '#dfd';
             statusDiv.style.borderColor = '#bdb';
             statusDiv.style.color = '#040';
 
         } catch (error) {
-            statusDiv.innerHTML = `❌ Error initializing plot: ${error.message}`;
+            statusDiv.innerHTML = `❌ Error initializing plots: ${error.message}`;
             statusDiv.style.background = '#fdd';
             console.error('Plot initialization error:', error);
         }
     }
 
-    // Start initialization
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initializeWhenReady);
     } else {
