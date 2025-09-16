@@ -153,221 +153,315 @@ Play with the interactive plots above - change the parameters and watch how the 
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
-// Normal Distribution Plot
-function updateNormalPlot() {
-    const mu = parseFloat(document.getElementById('normal-mu').value);
-    const sigma = parseFloat(document.getElementById('normal-sigma').value);
-
-    document.getElementById('normal-mu-value').textContent = mu;
-    document.getElementById('normal-sigma-value').textContent = sigma;
-
-    const x = [];
-    const y = [];
-    for (let i = -10; i <= 10; i += 0.1) {
-        x.push(i);
-        const pdf = (1 / (sigma * Math.sqrt(2 * Math.PI))) *
-                   Math.exp(-0.5 * Math.pow((i - mu) / sigma, 2));
-        y.push(pdf);
-    }
-
-    const trace = {
-        x: x,
-        y: y,
-        type: 'scatter',
-        mode: 'lines',
-        name: 'PDF',
-        line: { color: 'red', width: 3 }
+window.addEventListener('load', function() {
+    // Configuration for all plots
+    const config = {
+        responsive: true,
+        displayModeBar: false
     };
 
-    const layout = {
-        title: `Normal Distribution (μ=${mu}, σ=${sigma})`,
-        xaxis: { title: 'x' },
-        yaxis: { title: 'Probability Density' },
-        showlegend: false
+    const commonLayout = {
+        font: { family: 'monospace', size: 12 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        margin: { l: 50, r: 30, t: 50, b: 50 }
     };
 
-    Plotly.newPlot('normal-plot', [trace], layout);
-}
+    // Normal Distribution
+    function updateNormalPlot() {
+        const mu = parseFloat(document.getElementById('normal-mu').value);
+        const sigma = parseFloat(document.getElementById('normal-sigma').value);
 
-// Exponential Distribution Plot
-function updateExponentialPlot() {
-    const lambda = parseFloat(document.getElementById('exp-lambda').value);
+        document.getElementById('normal-mu-value').textContent = mu;
+        document.getElementById('normal-sigma-value').textContent = sigma;
 
-    document.getElementById('exp-lambda-value').textContent = lambda;
+        const x = [];
+        const y = [];
+        const start = mu - 4 * sigma;
+        const end = mu + 4 * sigma;
 
-    const x = [];
-    const y = [];
-    for (let i = 0; i <= 5; i += 0.05) {
-        x.push(i);
-        const pdf = lambda * Math.exp(-lambda * i);
-        y.push(pdf);
-    }
-
-    const trace = {
-        x: x,
-        y: y,
-        type: 'scatter',
-        mode: 'lines',
-        name: 'PDF',
-        line: { color: 'red', width: 3 }
-    };
-
-    const layout = {
-        title: `Exponential Distribution (λ=${lambda})`,
-        xaxis: { title: 'x' },
-        yaxis: { title: 'Probability Density' },
-        showlegend: false
-    };
-
-    Plotly.newPlot('exponential-plot', [trace], layout);
-}
-
-// Weibull Distribution Plot
-function updateWeibullPlot() {
-    const k = parseFloat(document.getElementById('weibull-k').value);
-    const lambda = parseFloat(document.getElementById('weibull-lambda').value);
-
-    document.getElementById('weibull-k-value').textContent = k;
-    document.getElementById('weibull-lambda-value').textContent = lambda;
-
-    const x = [];
-    const y = [];
-    for (let i = 0.01; i <= 5; i += 0.05) {
-        x.push(i);
-        const pdf = (k / lambda) * Math.pow(i / lambda, k - 1) *
-                   Math.exp(-Math.pow(i / lambda, k));
-        y.push(pdf);
-    }
-
-    const trace = {
-        x: x,
-        y: y,
-        type: 'scatter',
-        mode: 'lines',
-        name: 'PDF',
-        line: { color: 'red', width: 3 }
-    };
-
-    const layout = {
-        title: `Weibull Distribution (k=${k}, λ=${lambda})`,
-        xaxis: { title: 'x' },
-        yaxis: { title: 'Probability Density' },
-        showlegend: false
-    };
-
-    Plotly.newPlot('weibull-plot', [trace], layout);
-}
-
-// Gamma Distribution Plot
-function updateGammaPlot() {
-    const alpha = parseFloat(document.getElementById('gamma-alpha').value);
-    const beta = parseFloat(document.getElementById('gamma-beta').value);
-
-    document.getElementById('gamma-alpha-value').textContent = alpha;
-    document.getElementById('gamma-beta-value').textContent = beta;
-
-    // Gamma function approximation using Stirling's approximation for simplicity
-    function gamma(z) {
-        if (z < 0.5) return Math.PI / (Math.sin(Math.PI * z) * gamma(1 - z));
-        z--;
-        let x = 0.99999999999980993;
-        const g = 7;
-        const c = [676.5203681218851, -1259.1392167224028, 771.32342877765313,
-                  -176.61502916214059, 12.507343278686905, -0.13857109526572012,
-                  9.9843695780195716e-6, 1.5056327351493116e-7];
-        for (let i = 0; i < c.length; i++) {
-            x += c[i] / (z + i + 1);
+        for (let i = start; i <= end; i += (end - start) / 200) {
+            x.push(i);
+            const pdf = (1 / (sigma * Math.sqrt(2 * Math.PI))) *
+                       Math.exp(-0.5 * Math.pow((i - mu) / sigma, 2));
+            y.push(pdf);
         }
-        const t = z + g + 0.5;
-        const sqrt2pi = Math.sqrt(2 * Math.PI);
-        return sqrt2pi * Math.pow(t, z + 0.5) * Math.exp(-t) * x;
+
+        const trace = {
+            x: x,
+            y: y,
+            type: 'scatter',
+            mode: 'lines',
+            line: { color: '#dc2626', width: 3 },
+            fill: 'tonexty',
+            fillcolor: 'rgba(220, 38, 38, 0.1)'
+        };
+
+        const layout = {
+            ...commonLayout,
+            title: { text: `Normal Distribution (μ=${mu}, σ=${sigma})`, font: { size: 14 } },
+            xaxis: { title: 'x', gridcolor: 'rgba(128,128,128,0.2)' },
+            yaxis: { title: 'Probability Density', gridcolor: 'rgba(128,128,128,0.2)' }
+        };
+
+        Plotly.newPlot('normal-plot', [trace], layout, config);
     }
 
-    const x = [];
-    const y = [];
-    for (let i = 0.01; i <= 8; i += 0.05) {
-        x.push(i);
-        const pdf = (Math.pow(beta, alpha) / gamma(alpha)) *
-                   Math.pow(i, alpha - 1) * Math.exp(-beta * i);
-        y.push(pdf);
+    // Exponential Distribution
+    function updateExponentialPlot() {
+        const lambda = parseFloat(document.getElementById('exp-lambda').value);
+
+        document.getElementById('exp-lambda-value').textContent = lambda;
+
+        const x = [];
+        const y = [];
+        const end = 5 / lambda;
+
+        for (let i = 0; i <= end; i += end / 200) {
+            x.push(i);
+            const pdf = lambda * Math.exp(-lambda * i);
+            y.push(pdf);
+        }
+
+        const trace = {
+            x: x,
+            y: y,
+            type: 'scatter',
+            mode: 'lines',
+            line: { color: '#dc2626', width: 3 },
+            fill: 'tonexty',
+            fillcolor: 'rgba(220, 38, 38, 0.1)'
+        };
+
+        const layout = {
+            ...commonLayout,
+            title: { text: `Exponential Distribution (λ=${lambda})`, font: { size: 14 } },
+            xaxis: { title: 'x', gridcolor: 'rgba(128,128,128,0.2)' },
+            yaxis: { title: 'Probability Density', gridcolor: 'rgba(128,128,128,0.2)' }
+        };
+
+        Plotly.newPlot('exponential-plot', [trace], layout, config);
     }
 
-    const trace = {
-        x: x,
-        y: y,
-        type: 'scatter',
-        mode: 'lines',
-        name: 'PDF',
-        line: { color: 'red', width: 3 }
-    };
+    // Weibull Distribution
+    function updateWeibullPlot() {
+        const k = parseFloat(document.getElementById('weibull-k').value);
+        const lambda = parseFloat(document.getElementById('weibull-lambda').value);
 
-    const layout = {
-        title: `Gamma Distribution (α=${alpha}, β=${beta})`,
-        xaxis: { title: 'x' },
-        yaxis: { title: 'Probability Density' },
-        showlegend: false
-    };
+        document.getElementById('weibull-k-value').textContent = k;
+        document.getElementById('weibull-lambda-value').textContent = lambda;
 
-    Plotly.newPlot('gamma-plot', [trace], layout);
-}
+        const x = [];
+        const y = [];
 
-// Event listeners
-document.addEventListener('DOMContentLoaded', function() {
+        for (let i = 0.01; i <= lambda * 3; i += (lambda * 3) / 200) {
+            x.push(i);
+            const pdf = (k / lambda) * Math.pow(i / lambda, k - 1) *
+                       Math.exp(-Math.pow(i / lambda, k));
+            y.push(pdf);
+        }
+
+        const trace = {
+            x: x,
+            y: y,
+            type: 'scatter',
+            mode: 'lines',
+            line: { color: '#dc2626', width: 3 },
+            fill: 'tonexty',
+            fillcolor: 'rgba(220, 38, 38, 0.1)'
+        };
+
+        const layout = {
+            ...commonLayout,
+            title: { text: `Weibull Distribution (k=${k}, λ=${lambda})`, font: { size: 14 } },
+            xaxis: { title: 'x', gridcolor: 'rgba(128,128,128,0.2)' },
+            yaxis: { title: 'Probability Density', gridcolor: 'rgba(128,128,128,0.2)' }
+        };
+
+        Plotly.newPlot('weibull-plot', [trace], layout, config);
+    }
+
+    // Gamma Distribution
+    function updateGammaPlot() {
+        const alpha = parseFloat(document.getElementById('gamma-alpha').value);
+        const beta = parseFloat(document.getElementById('gamma-beta').value);
+
+        document.getElementById('gamma-alpha-value').textContent = alpha;
+        document.getElementById('gamma-beta-value').textContent = beta;
+
+        // Simple gamma function approximation
+        function logGamma(z) {
+            const g = 7;
+            const c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028,
+                      771.32342877765313, -176.61502916214059, 12.507343278686905,
+                      -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+
+            z--;
+            let x = c[0];
+            for (let i = 1; i < g + 2; i++) {
+                x += c[i] / (z + i);
+            }
+            const t = z + g + 0.5;
+            return Math.log(Math.sqrt(2 * Math.PI)) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+        }
+
+        const x = [];
+        const y = [];
+        const end = Math.max(8, alpha / beta * 3);
+
+        for (let i = 0.01; i <= end; i += end / 200) {
+            x.push(i);
+            const logPdf = alpha * Math.log(beta) - logGamma(alpha) +
+                          (alpha - 1) * Math.log(i) - beta * i;
+            y.push(Math.exp(logPdf));
+        }
+
+        const trace = {
+            x: x,
+            y: y,
+            type: 'scatter',
+            mode: 'lines',
+            line: { color: '#dc2626', width: 3 },
+            fill: 'tonexty',
+            fillcolor: 'rgba(220, 38, 38, 0.1)'
+        };
+
+        const layout = {
+            ...commonLayout,
+            title: { text: `Gamma Distribution (α=${alpha}, β=${beta})`, font: { size: 14 } },
+            xaxis: { title: 'x', gridcolor: 'rgba(128,128,128,0.2)' },
+            yaxis: { title: 'Probability Density', gridcolor: 'rgba(128,128,128,0.2)' }
+        };
+
+        Plotly.newPlot('gamma-plot', [trace], layout, config);
+    }
+
     // Initialize plots
-    updateNormalPlot();
-    updateExponentialPlot();
-    updateWeibullPlot();
-    updateGammaPlot();
+    setTimeout(() => {
+        updateNormalPlot();
+        updateExponentialPlot();
+        updateWeibullPlot();
+        updateGammaPlot();
+    }, 100);
 
     // Add event listeners
-    document.getElementById('normal-mu').addEventListener('input', updateNormalPlot);
-    document.getElementById('normal-sigma').addEventListener('input', updateNormalPlot);
-    document.getElementById('exp-lambda').addEventListener('input', updateExponentialPlot);
-    document.getElementById('weibull-k').addEventListener('input', updateWeibullPlot);
-    document.getElementById('weibull-lambda').addEventListener('input', updateWeibullPlot);
-    document.getElementById('gamma-alpha').addEventListener('input', updateGammaPlot);
-    document.getElementById('gamma-beta').addEventListener('input', updateGammaPlot);
+    document.getElementById('normal-mu')?.addEventListener('input', updateNormalPlot);
+    document.getElementById('normal-sigma')?.addEventListener('input', updateNormalPlot);
+    document.getElementById('exp-lambda')?.addEventListener('input', updateExponentialPlot);
+    document.getElementById('weibull-k')?.addEventListener('input', updateWeibullPlot);
+    document.getElementById('weibull-lambda')?.addEventListener('input', updateWeibullPlot);
+    document.getElementById('gamma-alpha')?.addEventListener('input', updateGammaPlot);
+    document.getElementById('gamma-beta')?.addEventListener('input', updateGammaPlot);
 });
 </script>
 
 <style>
 .interactive-plot {
     margin: 2rem 0;
-    padding: 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+    padding: 1.5rem;
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
     background: var(--color-background);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .controls {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
+    background: rgba(220, 38, 38, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(220, 38, 38, 0.2);
 }
 
 .controls label {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-foreground);
+    font-size: 0.95rem;
 }
 
 .controls input[type="range"] {
-    width: 200px;
+    width: 180px;
     margin-left: 1rem;
+    height: 6px;
+    background: #ddd;
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.controls input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .controls span {
-    min-width: 40px;
+    min-width: 50px;
     text-align: right;
     color: var(--color-accent);
     font-weight: bold;
+    font-size: 1rem;
+    background: rgba(220, 38, 38, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+[id$="-plot"] {
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
 }
 
 @media (min-width: 640px) {
     .controls {
         grid-template-columns: 1fr 1fr;
     }
+}
+
+@media (max-width: 639px) {
+    .controls input[type="range"] {
+        width: 140px;
+    }
+
+    .interactive-plot {
+        padding: 1rem;
+    }
+}
+
+/* Dark mode adjustments */
+html[data-theme="dark"] .interactive-plot {
+    background: var(--color-background);
+    border-color: var(--color-border);
+}
+
+html[data-theme="dark"] [id$="-plot"] {
+    background: #1a1a1a;
+}
+
+html[data-theme="dark"] .controls {
+    background: rgba(248, 113, 113, 0.1);
+    border-color: rgba(248, 113, 113, 0.3);
 }
 </style>
