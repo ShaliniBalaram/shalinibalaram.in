@@ -66,6 +66,17 @@ For a standard normal distribution (μ=0, σ=1):
 - **CDF at x=0**: F(0) = 0.5 (50% of data below the mean)
 - **CDF at x=1**: F(1) ≈ 0.841 (84.1% of data below x=1)
 
+**Visual Shape:**
+```
+PDF (Bell Curve):           CDF (S-Curve):
+    0.4 |      •                1.0 |        ████
+        |    •   •                  |      ██
+    0.2 |  •       •            0.5 |    ██
+        |•           •              |   █
+    0.0 |_____________           0.0 |_█_______
+       -3  -1  0  1  3               -3  0  3
+```
+
 **Example scenarios:**
 - **Standard Normal (μ=0, σ=1)**: The classic reference distribution
 - **Measurement errors (μ=0, σ=0.1)**: Tight precision around true value
@@ -107,6 +118,17 @@ For an exponential distribution with λ=1:
 - **CDF at x=0**: F(0) = 1 - e^0 = 0 (no events by time 0)
 - **CDF at x=1**: F(1) = 1 - e^(-1) ≈ 0.632 (63.2% of events by time 1)
 
+**Visual Shape:**
+```
+PDF (Exponential Decay):    CDF (Rising Curve):
+   1.0 |█                    1.0 |      ████
+       |█•                       |     ███
+   0.5 | █•                  0.5 |   ███
+       |  █•                     |  ██
+   0.0 |___█████            0.0 |██_______
+       0  1  2  3                0  1  2  3
+```
+
 **Example scenarios:**
 - **Fast events (λ=3)**: High frequency, steep decline - like frequent website clicks
 - **Moderate rate (λ=1)**: Standard exponential - typical machine failures
@@ -145,6 +167,17 @@ For a Weibull distribution with k=2, λ=1 (Rayleigh distribution):
 - **PDF at x=1**: f(1) = 2 × 1 × e^(-1) ≈ 0.736 (near the peak)
 - **CDF at x=0**: F(0) = 1 - e^0 = 0 (no failures by time 0)
 - **CDF at x=1**: F(1) = 1 - e^(-1) ≈ 0.632 (63.2% failures by time 1)
+
+**Visual Shape:**
+```
+PDF (Rayleigh k=2):         CDF (S-shaped):
+   0.8 |    •               1.0 |     ████
+       |   • •                  |    ███
+   0.4 |  •   •             0.5 |  ███
+       | •     •                |███
+   0.0 |________•           0.0 |________
+       0  1  2  3                0  1  2  3
+```
 
 **Example scenarios:**
 - **Decreasing failure (k=0.5, λ=1)**: Early failures common, then stable
@@ -185,6 +218,17 @@ For a gamma distribution with α=2, β=1:
 - **PDF at x=1**: f(1) = 1 × 1 × e^(-1) ≈ 0.368 (peak value)
 - **CDF at x=0**: F(0) = 0 (no values below zero)
 - **CDF at x=2**: F(2) = 1 - 3e^(-2) ≈ 0.594 (59.4% below x=2)
+
+**Visual Shape:**
+```
+PDF (Right-skewed):         CDF (Smooth Rise):
+   0.4 |  •                 1.0 |      ████
+       | • •                    |     ███
+   0.2 |•   •               0.5 |   ███
+       |     •                  |  ██
+   0.0 |______••            0.0 |██_______
+       0  1  2  3                0  1  2  3
+```
 
 **Example scenarios:**
 - **J-shaped (α=0.5, β=1)**: Starts at infinity, many small values
@@ -263,19 +307,29 @@ This hands-on exploration is the best way to develop intuition for which distrib
 <script is:inline>
 (function() {
     function initializeWhenReady() {
+        console.log('Attempting to initialize distribution plots...');
+
         const canvas = document.getElementById('pdf-plot');
         const statusDiv = document.getElementById('js-status');
         const controls = document.getElementById('param-controls');
 
         if (!canvas || !statusDiv || !controls) {
+            console.log('Missing elements, retrying...', { canvas: !!canvas, statusDiv: !!statusDiv, controls: !!controls });
             setTimeout(initializeWhenReady, 100);
             return;
         }
 
+        console.log('All elements found, initializing...');
         statusDiv.innerHTML = '⚙️ Initializing interactive plots...';
         statusDiv.style.background = '#ffd';
 
         try {
+            // Check if canvas context is available
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                throw new Error('Canvas context not available');
+            }
+            console.log('Canvas context acquired successfully');
             // Global state
             window.currentDistribution = 'normal';
             window.plotParams = {
@@ -578,9 +632,11 @@ This hands-on exploration is the best way to develop intuition for which distrib
             statusDiv.style.color = '#040';
 
         } catch (error) {
+            console.error('Plot initialization error:', error);
             statusDiv.innerHTML = `❌ Error initializing plots: ${error.message}`;
             statusDiv.style.background = '#fdd';
-            console.error('Plot initialization error:', error);
+            statusDiv.style.borderColor = '#faa';
+            statusDiv.style.color = '#800';
         }
     }
 
