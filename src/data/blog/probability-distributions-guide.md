@@ -387,7 +387,7 @@ function drawMiniPlot(canvasId, type, distribution, params) {
     ctx.stroke();
 
     // Draw curve
-    ctx.strokeStyle = '#ff9500';
+    ctx.strokeStyle = '#e53e3e';
     ctx.lineWidth = 2;
     ctx.beginPath();
     for (let i = 0; i < data.length; i++) {
@@ -402,7 +402,7 @@ function drawMiniPlot(canvasId, type, distribution, params) {
     ctx.stroke();
 
     // Fill area under curve
-    ctx.fillStyle = 'rgba(255, 149, 0, 0.2)';
+    ctx.fillStyle = 'rgba(229, 62, 62, 0.2)';
     ctx.beginPath();
     ctx.moveTo(scaleX(range[0]), scaleY(0));
     for (let i = 0; i < data.length; i++) {
@@ -627,7 +627,7 @@ if (document.readyState === 'loading') {
                 ctx.restore();
 
                 // Draw curve
-                ctx.strokeStyle = '#ff9500';
+                ctx.strokeStyle = '#e53e3e';
                 ctx.lineWidth = 3;
                 ctx.beginPath();
                 for (let i = 0; i < data.length; i++) {
@@ -642,7 +642,7 @@ if (document.readyState === 'loading') {
                 ctx.stroke();
 
                 // Fill area
-                ctx.fillStyle = 'rgba(255, 149, 0, 0.1)';
+                ctx.fillStyle = 'rgba(229, 62, 62, 0.1)';
                 ctx.beginPath();
                 ctx.moveTo(scaleX(xMin), scaleY(0));
                 for (let i = 0; i < data.length; i++) {
@@ -854,10 +854,10 @@ html[data-theme="dark"] .mini-plot-container canvas {
     display: grid;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
-    background: rgba(255, 149, 0, 0.05);
+    background: rgba(229, 62, 62, 0.05);
     padding: 1.5rem;
     border-radius: 8px;
-    border: 1px solid rgba(255, 149, 0, 0.2);
+    border: 1px solid rgba(251, 182, 206, 0.3);
 }
 
 .distribution-selector label {
@@ -920,7 +920,7 @@ html[data-theme="dark"] .mini-plot-container canvas {
     text-align: right;
     color: var(--color-accent);
     font-weight: bold;
-    background: rgba(255, 149, 0, 0.1);
+    background: rgba(229, 62, 62, 0.1);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     font-family: monospace;
@@ -951,7 +951,7 @@ html[data-theme="dark"] .mini-plot-container canvas {
 }
 
 .insights {
-    background: rgba(255, 149, 0, 0.05);
+    background: rgba(229, 62, 62, 0.05);
     padding: 1rem;
     border-radius: 6px;
     border-left: 4px solid var(--color-accent);
