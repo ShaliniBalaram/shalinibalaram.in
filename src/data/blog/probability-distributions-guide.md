@@ -178,16 +178,7 @@ Now that you understand the theory, let's explore these distributions hands-on! 
 
 <div id="distribution-explorer">
   <div class="controls-panel">
-    <div class="distribution-selector">
-      <label for="dist-select">Choose Distribution:</label>
-      <select id="dist-select">
-        <option value="normal">Normal Distribution</option>
-        <option value="exponential">Exponential Distribution</option>
-        <option value="weibull">Weibull Distribution</option>
-        <option value="gamma">Gamma Distribution</option>
-      </select>
-    </div>
-
+    <h3>Interactive Normal Distribution</h3>
     <div class="parameter-controls" id="param-controls">
       <!-- Parameters will be populated by JavaScript -->
     </div>
@@ -200,353 +191,179 @@ Now that you understand the theory, let's explore these distributions hands-on! 
   <div class="plot-container">
     <canvas id="pdf-plot" width="600" height="400"></canvas>
   </div>
-
-  <div class="insights" id="insights">
-    <!-- Distribution insights will be displayed here -->
-  </div>
 </div>
 
 **Try this:**
-1. Start with the Normal distribution - change μ and σ to see how the curve shifts and spreads
-2. Switch to Exponential - notice how λ affects the decay rate
-3. Explore Weibull with different k values - see how versatile it is!
-4. Play with Gamma parameters - watch how α and β create different shapes
+- **Change μ (mean)**: See how the curve shifts left and right
+- **Change σ (standard deviation)**: Watch how the curve gets wider or narrower
+- **Try extreme values**: μ=3, σ=0.5 vs μ=0, σ=2
 
 This hands-on exploration is the best way to develop intuition for which distribution fits your data!
 
 <script>
-class DistributionExplorer {
-    constructor() {
-        this.canvas = document.getElementById('pdf-plot');
-        this.ctx = this.canvas.getContext('2d');
-        this.currentDist = 'normal';
-        this.parameters = {
-            normal: { mu: 0, sigma: 1 },
-            exponential: { lambda: 1 },
-            weibull: { k: 2, lambda: 1 },
-            gamma: { alpha: 2, beta: 1 }
-        };
-        this.init();
+// Simple interactive plot
+let currentParams = { mu: 0, sigma: 1 };
+
+function normalPDF(x, mu, sigma) {
+    return (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+}
+
+function drawPlot() {
+    const canvas = document.getElementById('pdf-plot');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+
+    // Set up ranges
+    const xMin = currentParams.mu - 4 * currentParams.sigma;
+    const xMax = currentParams.mu + 4 * currentParams.sigma;
+    const points = 200;
+
+    // Calculate PDF values
+    const data = [];
+    let yMax = 0;
+    for (let i = 0; i <= points; i++) {
+        const x = xMin + (xMax - xMin) * i / points;
+        const y = normalPDF(x, currentParams.mu, currentParams.sigma);
+        data.push([x, y]);
+        if (y > yMax) yMax = y;
     }
 
-    init() {
-        this.setupControls();
-        this.setupEquationDisplay();
-        this.updateDisplay();
+    // Set up scaling
+    const margin = 50;
+    const plotWidth = width - 2 * margin;
+    const plotHeight = height - 2 * margin;
 
-        document.getElementById('dist-select').addEventListener('change', (e) => {
-            this.currentDist = e.target.value;
-            this.updateDisplay();
-        });
+    function scaleX(x) {
+        return margin + (x - xMin) / (xMax - xMin) * plotWidth;
     }
 
-    setupControls() {
-        const controlsDiv = document.getElementById('param-controls');
-        const distributions = {
-            normal: [
-                { name: 'mu', label: 'μ (Mean)', min: -5, max: 5, step: 0.1, value: 0 },
-                { name: 'sigma', label: 'σ (Std Dev)', min: 0.1, max: 3, step: 0.1, value: 1 }
-            ],
-            exponential: [
-                { name: 'lambda', label: 'λ (Rate)', min: 0.1, max: 3, step: 0.1, value: 1 }
-            ],
-            weibull: [
-                { name: 'k', label: 'k (Shape)', min: 0.5, max: 5, step: 0.1, value: 2 },
-                { name: 'lambda', label: 'λ (Scale)', min: 0.5, max: 3, step: 0.1, value: 1 }
-            ],
-            gamma: [
-                { name: 'alpha', label: 'α (Shape)', min: 0.5, max: 5, step: 0.1, value: 2 },
-                { name: 'beta', label: 'β (Rate)', min: 0.1, max: 3, step: 0.1, value: 1 }
-            ]
-        };
-
-        this.controlsConfig = distributions;
-        this.updateControls();
+    function scaleY(y) {
+        return height - margin - (y / yMax) * plotHeight;
     }
 
-    updateControls() {
-        const controlsDiv = document.getElementById('param-controls');
-        const config = this.controlsConfig[this.currentDist];
+    // Draw axes
+    ctx.strokeStyle = '#666';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(margin, height - margin);
+    ctx.lineTo(width - margin, height - margin);
+    ctx.moveTo(margin, margin);
+    ctx.lineTo(margin, height - margin);
+    ctx.stroke();
 
-        controlsDiv.innerHTML = '';
-
-        config.forEach(param => {
-            const paramDiv = document.createElement('div');
-            paramDiv.className = 'param-control';
-
-            const currentValue = this.parameters[this.currentDist][param.name] || param.value;
-
-            paramDiv.innerHTML = `
-                <label for="${param.name}">${param.label}: <span id="${param.name}-value">${currentValue}</span></label>
-                <input type="range" id="${param.name}"
-                       min="${param.min}" max="${param.max}"
-                       step="${param.step}" value="${currentValue}">
-            `;
-
-            controlsDiv.appendChild(paramDiv);
-
-            document.getElementById(param.name).addEventListener('input', (e) => {
-                const value = parseFloat(e.target.value);
-                this.parameters[this.currentDist][param.name] = value;
-                document.getElementById(`${param.name}-value`).textContent = value;
-                this.plotDistribution();
-            });
-        });
-    }
-
-    setupEquationDisplay() {
-        const equations = {
-            normal: 'f(x) = (1/(σ√(2π))) × exp(-(x-μ)²/(2σ²))',
-            exponential: 'f(x) = λ × exp(-λx)',
-            weibull: 'f(x) = (k/λ) × (x/λ)^(k-1) × exp(-(x/λ)^k)',
-            gamma: 'f(x) = (β^α/Γ(α)) × x^(α-1) × exp(-βx)'
-        };
-        this.equations = equations;
-    }
-
-    updateDisplay() {
-        this.updateControls();
-        this.updateEquation();
-        this.updateInsights();
-        this.plotDistribution();
-    }
-
-    updateEquation() {
-        const eqDiv = document.getElementById('equation-display');
-        const params = this.parameters[this.currentDist];
-        let equation = this.equations[this.currentDist];
-
-        // Replace parameter symbols with current values
-        Object.keys(params).forEach(param => {
-            const value = params[param];
-            const symbols = {
-                mu: 'μ', sigma: 'σ', lambda: 'λ',
-                k: 'k', alpha: 'α', beta: 'β'
-            };
-            if (symbols[param]) {
-                equation = equation.replace(new RegExp(symbols[param], 'g'), value);
-            }
-        });
-
-        eqDiv.innerHTML = `<strong>Current PDF:</strong> ${equation}`;
-    }
-
-    updateInsights() {
-        const insights = {
-            normal: `With μ=${this.parameters.normal.mu} and σ=${this.parameters.normal.sigma}, the curve is centered at ${this.parameters.normal.mu} with ${this.parameters.normal.sigma > 1 ? 'high' : 'low'} spread.`,
-            exponential: `With λ=${this.parameters.exponential.lambda}, events occur every ${(1/this.parameters.exponential.lambda).toFixed(2)} time units on average.`,
-            weibull: `With k=${this.parameters.weibull.k}, this shows ${this.parameters.weibull.k < 1 ? 'decreasing' : this.parameters.weibull.k === 1 ? 'constant' : 'increasing'} failure rate.`,
-            gamma: `With α=${this.parameters.gamma.alpha} and β=${this.parameters.gamma.beta}, this distribution has mean ${(this.parameters.gamma.alpha/this.parameters.gamma.beta).toFixed(2)}.`
-        };
-
-        document.getElementById('insights').innerHTML = `<strong>Insight:</strong> ${insights[this.currentDist]}`;
-    }
-
-    normalPDF(x, mu, sigma) {
-        return (1 / (sigma * Math.sqrt(2 * Math.PI))) *
-               Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
-    }
-
-    exponentialPDF(x, lambda) {
-        return x >= 0 ? lambda * Math.exp(-lambda * x) : 0;
-    }
-
-    weibullPDF(x, k, lambda) {
-        if (x < 0) return 0;
-        return (k / lambda) * Math.pow(x / lambda, k - 1) *
-               Math.exp(-Math.pow(x / lambda, k));
-    }
-
-    gammaPDF(x, alpha, beta) {
-        if (x <= 0) return 0;
-        // Using log-space to avoid overflow
-        const logGamma = this.logGamma(alpha);
-        const logPdf = alpha * Math.log(beta) - logGamma +
-                      (alpha - 1) * Math.log(x) - beta * x;
-        return Math.exp(logPdf);
-    }
-
-    logGamma(z) {
-        // Stirling's approximation for log(Γ(z))
-        const g = 7;
-        const c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028,
-                  771.32342877765313, -176.61502916214059, 12.507343278686905,
-                  -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
-
-        z--;
-        let x = c[0];
-        for (let i = 1; i < g + 2; i++) {
-            x += c[i] / (z + i);
+    // Draw curve
+    ctx.strokeStyle = '#dc2626';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    data.forEach((point, i) => {
+        const x = scaleX(point[0]);
+        const y = scaleY(point[1]);
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
         }
-        const t = z + g + 0.5;
-        return Math.log(Math.sqrt(2 * Math.PI)) + (z + 0.5) * Math.log(t) - t + Math.log(x);
-    }
+    });
+    ctx.stroke();
 
-    getPDF(x) {
-        const params = this.parameters[this.currentDist];
-        switch (this.currentDist) {
-            case 'normal':
-                return this.normalPDF(x, params.mu, params.sigma);
-            case 'exponential':
-                return this.exponentialPDF(x, params.lambda);
-            case 'weibull':
-                return this.weibullPDF(x, params.k, params.lambda);
-            case 'gamma':
-                return this.gammaPDF(x, params.alpha, params.beta);
-            default:
-                return 0;
-        }
-    }
+    // Fill under curve
+    ctx.fillStyle = 'rgba(220, 38, 38, 0.1)';
+    ctx.beginPath();
+    ctx.moveTo(scaleX(xMin), scaleY(0));
+    data.forEach(point => {
+        ctx.lineTo(scaleX(point[0]), scaleY(point[1]));
+    });
+    ctx.lineTo(scaleX(xMax), scaleY(0));
+    ctx.closePath();
+    ctx.fill();
 
-    getXRange() {
-        const params = this.parameters[this.currentDist];
-        switch (this.currentDist) {
-            case 'normal':
-                return [params.mu - 4 * params.sigma, params.mu + 4 * params.sigma];
-            case 'exponential':
-                return [0, 5 / params.lambda];
-            case 'weibull':
-                return [0, params.lambda * 3];
-            case 'gamma':
-                return [0, Math.max(8, params.alpha / params.beta * 3)];
-            default:
-                return [0, 5];
-        }
-    }
+    // Labels
+    ctx.fillStyle = '#333';
+    ctx.font = '14px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Normal Distribution PDF', width / 2, 25);
+    ctx.fillText('x', width / 2, height - 10);
+}
 
-    plotDistribution() {
-        const width = this.canvas.width;
-        const height = this.canvas.height;
-        const margin = { top: 40, right: 40, bottom: 60, left: 80 };
-        const plotWidth = width - margin.left - margin.right;
-        const plotHeight = height - margin.top - margin.bottom;
+function updateParams() {
+    const muSlider = document.getElementById('mu-slider');
+    const sigmaSlider = document.getElementById('sigma-slider');
+    const muValue = document.getElementById('mu-value');
+    const sigmaValue = document.getElementById('sigma-value');
+    const equation = document.getElementById('equation-display');
 
-        // Clear canvas
-        this.ctx.clearRect(0, 0, width, height);
+    if (muSlider && sigmaSlider) {
+        currentParams.mu = parseFloat(muSlider.value);
+        currentParams.sigma = parseFloat(sigmaSlider.value);
 
-        // Get data
-        const [xMin, xMax] = this.getXRange();
-        const points = 300;
-        const dx = (xMax - xMin) / points;
-        const data = [];
-        let yMax = 0;
+        if (muValue) muValue.textContent = currentParams.mu;
+        if (sigmaValue) sigmaValue.textContent = currentParams.sigma;
 
-        for (let i = 0; i <= points; i++) {
-            const x = xMin + i * dx;
-            const y = this.getPDF(x);
-            data.push({ x, y });
-            if (y > yMax) yMax = y;
+        if (equation) {
+            equation.innerHTML = `<strong>PDF:</strong> f(x) = (1/(${currentParams.sigma}√(2π))) × exp(-(x-${currentParams.mu})²/(2×${currentParams.sigma}²))`;
         }
 
-        // Set up scales
-        const xScale = (x) => margin.left + ((x - xMin) / (xMax - xMin)) * plotWidth;
-        const yScale = (y) => margin.top + plotHeight - (y / yMax) * plotHeight;
-
-        // Draw axes
-        this.ctx.strokeStyle = '#666';
-        this.ctx.lineWidth = 1;
-        this.ctx.beginPath();
-        this.ctx.moveTo(margin.left, margin.top + plotHeight);
-        this.ctx.lineTo(margin.left + plotWidth, margin.top + plotHeight);
-        this.ctx.moveTo(margin.left, margin.top);
-        this.ctx.lineTo(margin.left, margin.top + plotHeight);
-        this.ctx.stroke();
-
-        // Draw curve
-        this.ctx.strokeStyle = '#dc2626';
-        this.ctx.lineWidth = 3;
-        this.ctx.beginPath();
-
-        data.forEach((point, i) => {
-            const x = xScale(point.x);
-            const y = yScale(point.y);
-            if (i === 0) {
-                this.ctx.moveTo(x, y);
-            } else {
-                this.ctx.lineTo(x, y);
-            }
-        });
-        this.ctx.stroke();
-
-        // Fill under curve
-        this.ctx.fillStyle = 'rgba(220, 38, 38, 0.1)';
-        this.ctx.beginPath();
-        this.ctx.moveTo(xScale(data[0].x), yScale(0));
-        data.forEach(point => {
-            this.ctx.lineTo(xScale(point.x), yScale(point.y));
-        });
-        this.ctx.lineTo(xScale(data[data.length - 1].x), yScale(0));
-        this.ctx.closePath();
-        this.ctx.fill();
-
-        // Add labels
-        this.ctx.fillStyle = '#333';
-        this.ctx.font = '14px monospace';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('x', width / 2, height - 20);
-
-        this.ctx.save();
-        this.ctx.translate(20, height / 2);
-        this.ctx.rotate(-Math.PI / 2);
-        this.ctx.fillText('Probability Density', 0, 0);
-        this.ctx.restore();
-
-        // Add title
-        this.ctx.font = 'bold 16px monospace';
-        this.ctx.fillText(`${this.currentDist.charAt(0).toUpperCase() + this.currentDist.slice(1)} Distribution`, width / 2, 25);
+        drawPlot();
     }
 }
 
-// Test function to verify functionality
-function testDistributionExplorer() {
-    console.log('Testing Distribution Explorer...');
-    const canvas = document.getElementById('pdf-plot');
+function initPlot() {
     const statusDiv = document.getElementById('js-status');
+    const canvas = document.getElementById('pdf-plot');
 
     if (!canvas) {
-        console.error('Canvas not found!');
         if (statusDiv) {
-            statusDiv.innerHTML = '❌ Error: Canvas element not found. Please refresh the page.';
+            statusDiv.innerHTML = '❌ Canvas not found';
             statusDiv.style.background = '#fdd';
         }
-        return false;
+        return;
     }
 
-    console.log('Canvas found, initializing...');
     try {
-        const explorer = new DistributionExplorer();
-        console.log('Distribution Explorer initialized successfully!');
+        // Set up controls
+        const controls = document.getElementById('param-controls');
+        if (controls) {
+            controls.innerHTML = `
+                <div class="param-control">
+                    <label>μ (Mean): <span id="mu-value">0</span></label>
+                    <input type="range" id="mu-slider" min="-3" max="3" step="0.1" value="0">
+                </div>
+                <div class="param-control">
+                    <label>σ (Std Dev): <span id="sigma-value">1</span></label>
+                    <input type="range" id="sigma-slider" min="0.1" max="2.5" step="0.1" value="1">
+                </div>
+            `;
 
-        // Update status to success
+            document.getElementById('mu-slider').addEventListener('input', updateParams);
+            document.getElementById('sigma-slider').addEventListener('input', updateParams);
+        }
+
+        updateParams();
+
         if (statusDiv) {
-            statusDiv.innerHTML = '✅ Interactive plot loaded successfully! Try changing the parameters below.';
+            statusDiv.innerHTML = '✅ Interactive Normal Distribution plot ready! Try the sliders.';
             statusDiv.style.background = '#dfd';
             statusDiv.style.borderColor = '#bdb';
             statusDiv.style.color = '#040';
         }
-        return true;
+
     } catch (error) {
-        console.error('Error initializing Distribution Explorer:', error);
         if (statusDiv) {
-            statusDiv.innerHTML = `❌ Error loading interactive plot: ${error.message}`;
+            statusDiv.innerHTML = `❌ Error: ${error.message}`;
             statusDiv.style.background = '#fdd';
         }
-        return false;
     }
 }
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, waiting for elements...');
-    setTimeout(() => {
-        const success = testDistributionExplorer();
-        if (!success) {
-            console.log('Retrying in 1 second...');
-            setTimeout(() => {
-                testDistributionExplorer();
-            }, 1000);
-        }
-    }, 200);
+    setTimeout(initPlot, 100);
 });
 </script>
 
