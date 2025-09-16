@@ -67,15 +67,16 @@ For a standard normal distribution (μ=0, σ=1):
 - **CDF at x=1**: F(1) ≈ 0.841 (84.1% of data below x=1)
 
 **Visual Shape:**
-```
-PDF (Bell Curve):           CDF (S-Curve):
-    0.4 |      •                1.0 |        ████
-        |    •   •                  |      ██
-    0.2 |  •       •            0.5 |    ██
-        |•           •              |   █
-    0.0 |_____________           0.0 |_█_______
-       -3  -1  0  1  3               -3  0  3
-```
+<div class="mini-plots">
+  <div class="mini-plot-container">
+    <h4>PDF (Probability Density)</h4>
+    <canvas id="normal-pdf-mini" width="200" height="120"></canvas>
+  </div>
+  <div class="mini-plot-container">
+    <h4>CDF (Cumulative Distribution)</h4>
+    <canvas id="normal-cdf-mini" width="200" height="120"></canvas>
+  </div>
+</div>
 
 **Example scenarios:**
 - **Standard Normal (μ=0, σ=1)**: The classic reference distribution
@@ -119,15 +120,16 @@ For an exponential distribution with λ=1:
 - **CDF at x=1**: F(1) = 1 - e^(-1) ≈ 0.632 (63.2% of events by time 1)
 
 **Visual Shape:**
-```
-PDF (Exponential Decay):    CDF (Rising Curve):
-   1.0 |█                    1.0 |      ████
-       |█•                       |     ███
-   0.5 | █•                  0.5 |   ███
-       |  █•                     |  ██
-   0.0 |___█████            0.0 |██_______
-       0  1  2  3                0  1  2  3
-```
+<div class="mini-plots">
+  <div class="mini-plot-container">
+    <h4>PDF (Exponential Decay)</h4>
+    <canvas id="exponential-pdf-mini" width="200" height="120"></canvas>
+  </div>
+  <div class="mini-plot-container">
+    <h4>CDF (Rising Curve)</h4>
+    <canvas id="exponential-cdf-mini" width="200" height="120"></canvas>
+  </div>
+</div>
 
 **Example scenarios:**
 - **Fast events (λ=3)**: High frequency, steep decline - like frequent website clicks
@@ -169,15 +171,16 @@ For a Weibull distribution with k=2, λ=1 (Rayleigh distribution):
 - **CDF at x=1**: F(1) = 1 - e^(-1) ≈ 0.632 (63.2% failures by time 1)
 
 **Visual Shape:**
-```
-PDF (Rayleigh k=2):         CDF (S-shaped):
-   0.8 |    •               1.0 |     ████
-       |   • •                  |    ███
-   0.4 |  •   •             0.5 |  ███
-       | •     •                |███
-   0.0 |________•           0.0 |________
-       0  1  2  3                0  1  2  3
-```
+<div class="mini-plots">
+  <div class="mini-plot-container">
+    <h4>PDF (Rayleigh k=2)</h4>
+    <canvas id="weibull-pdf-mini" width="200" height="120"></canvas>
+  </div>
+  <div class="mini-plot-container">
+    <h4>CDF (S-shaped)</h4>
+    <canvas id="weibull-cdf-mini" width="200" height="120"></canvas>
+  </div>
+</div>
 
 **Example scenarios:**
 - **Decreasing failure (k=0.5, λ=1)**: Early failures common, then stable
@@ -220,15 +223,16 @@ For a gamma distribution with α=2, β=1:
 - **CDF at x=2**: F(2) = 1 - 3e^(-2) ≈ 0.594 (59.4% below x=2)
 
 **Visual Shape:**
-```
-PDF (Right-skewed):         CDF (Smooth Rise):
-   0.4 |  •                 1.0 |      ████
-       | • •                    |     ███
-   0.2 |•   •               0.5 |   ███
-       |     •                  |  ██
-   0.0 |______••            0.0 |██_______
-       0  1  2  3                0  1  2  3
-```
+<div class="mini-plots">
+  <div class="mini-plot-container">
+    <h4>PDF (Right-skewed)</h4>
+    <canvas id="gamma-pdf-mini" width="200" height="120"></canvas>
+  </div>
+  <div class="mini-plot-container">
+    <h4>CDF (Smooth Rise)</h4>
+    <canvas id="gamma-cdf-mini" width="200" height="120"></canvas>
+  </div>
+</div>
 
 **Example scenarios:**
 - **J-shaped (α=0.5, β=1)**: Starts at infinity, many small values
@@ -303,6 +307,147 @@ Now that you understand the theory, let's explore these distributions hands-on! 
 - **Notice the patterns**: How do distributions relate to each other?
 
 This hands-on exploration is the best way to develop intuition for which distribution fits your data!
+
+<script is:inline>
+// Mini plot drawing functions
+function drawMiniPlot(canvasId, type, distribution, params) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    const margin = 20;
+    const plotWidth = width - 2 * margin;
+    const plotHeight = height - 2 * margin;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Define ranges and functions for each distribution
+    let range, func;
+    if (distribution === 'normal') {
+        range = [-3, 3];
+        if (type === 'pdf') {
+            func = (x) => (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * x * x);
+        } else {
+            func = (x) => 0.5 * (1 + erf(x / Math.sqrt(2)));
+        }
+    } else if (distribution === 'exponential') {
+        range = [0, 4];
+        if (type === 'pdf') {
+            func = (x) => x < 0 ? 0 : Math.exp(-x);
+        } else {
+            func = (x) => x < 0 ? 0 : 1 - Math.exp(-x);
+        }
+    } else if (distribution === 'weibull') {
+        range = [0, 3];
+        if (type === 'pdf') {
+            func = (x) => x < 0 ? 0 : 2 * x * Math.exp(-x * x);
+        } else {
+            func = (x) => x < 0 ? 0 : 1 - Math.exp(-x * x);
+        }
+    } else if (distribution === 'gamma') {
+        range = [0, 5];
+        if (type === 'pdf') {
+            func = (x) => x < 0 ? 0 : x * Math.exp(-x);
+        } else {
+            func = (x) => x < 0 ? 0 : 1 - (1 + x) * Math.exp(-x);
+        }
+    }
+
+    // Generate data points
+    const points = 100;
+    const data = [];
+    let yMax = 0;
+
+    for (let i = 0; i <= points; i++) {
+        const x = range[0] + (range[1] - range[0]) * i / points;
+        const y = func(x);
+        data.push([x, y]);
+        if (y > yMax) yMax = y;
+    }
+
+    // Scaling functions
+    function scaleX(x) {
+        return margin + (x - range[0]) / (range[1] - range[0]) * plotWidth;
+    }
+
+    function scaleY(y) {
+        return height - margin - (y / yMax) * plotHeight;
+    }
+
+    // Draw axes
+    ctx.strokeStyle = '#666';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(margin, height - margin);
+    ctx.lineTo(width - margin, height - margin);
+    ctx.moveTo(margin, margin);
+    ctx.lineTo(margin, height - margin);
+    ctx.stroke();
+
+    // Draw curve
+    ctx.strokeStyle = '#ff9500';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i < data.length; i++) {
+        const x = scaleX(data[i][0]);
+        const y = scaleY(data[i][1]);
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    }
+    ctx.stroke();
+
+    // Fill area under curve
+    ctx.fillStyle = 'rgba(255, 149, 0, 0.2)';
+    ctx.beginPath();
+    ctx.moveTo(scaleX(range[0]), scaleY(0));
+    for (let i = 0; i < data.length; i++) {
+        ctx.lineTo(scaleX(data[i][0]), scaleY(data[i][1]));
+    }
+    ctx.lineTo(scaleX(range[1]), scaleY(0));
+    ctx.closePath();
+    ctx.fill();
+}
+
+// Error function approximation for normal CDF
+function erf(x) {
+    const a1 =  0.254829592;
+    const a2 = -0.284496736;
+    const a3 =  1.421413741;
+    const a4 = -1.453152027;
+    const a5 =  1.061405429;
+    const p  =  0.3275911;
+    const sign = x < 0 ? -1 : 1;
+    x = Math.abs(x);
+    const t = 1.0 / (1.0 + p * x);
+    const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+    return sign * y;
+}
+
+// Initialize mini plots when DOM is ready
+function initMiniPlots() {
+    setTimeout(() => {
+        drawMiniPlot('normal-pdf-mini', 'pdf', 'normal');
+        drawMiniPlot('normal-cdf-mini', 'cdf', 'normal');
+        drawMiniPlot('exponential-pdf-mini', 'pdf', 'exponential');
+        drawMiniPlot('exponential-cdf-mini', 'cdf', 'exponential');
+        drawMiniPlot('weibull-pdf-mini', 'pdf', 'weibull');
+        drawMiniPlot('weibull-cdf-mini', 'cdf', 'weibull');
+        drawMiniPlot('gamma-pdf-mini', 'pdf', 'gamma');
+        drawMiniPlot('gamma-cdf-mini', 'cdf', 'gamma');
+    }, 500);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMiniPlots);
+} else {
+    initMiniPlots();
+}
+</script>
 
 <script is:inline>
 (function() {
@@ -482,7 +627,7 @@ This hands-on exploration is the best way to develop intuition for which distrib
                 ctx.restore();
 
                 // Draw curve
-                ctx.strokeStyle = '#dc2626';
+                ctx.strokeStyle = '#ff9500';
                 ctx.lineWidth = 3;
                 ctx.beginPath();
                 for (let i = 0; i < data.length; i++) {
@@ -497,7 +642,7 @@ This hands-on exploration is the best way to develop intuition for which distrib
                 ctx.stroke();
 
                 // Fill area
-                ctx.fillStyle = 'rgba(220, 38, 38, 0.1)';
+                ctx.fillStyle = 'rgba(255, 149, 0, 0.1)';
                 ctx.beginPath();
                 ctx.moveTo(scaleX(xMin), scaleY(0));
                 for (let i = 0; i < data.length; i++) {
@@ -649,6 +794,53 @@ This hands-on exploration is the best way to develop intuition for which distrib
 </script>
 
 <style>
+/* Mini plot styling */
+.mini-plots {
+    display: flex;
+    gap: 2rem;
+    margin: 1.5rem 0;
+    justify-content: center;
+}
+
+.mini-plot-container {
+    text-align: center;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mini-plot-container h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--color-foreground);
+    font-weight: 600;
+}
+
+.mini-plot-container canvas {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+}
+
+/* Dark mode adjustments */
+html[data-theme="dark"] .mini-plot-container canvas {
+    background: #1a1a1a;
+}
+
+@media (max-width: 768px) {
+    .mini-plots {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .mini-plot-container {
+        margin: 0 auto;
+        max-width: 250px;
+    }
+}
+
 #distribution-explorer {
     background: var(--color-background);
     border: 2px solid var(--color-border);
@@ -662,10 +854,10 @@ This hands-on exploration is the best way to develop intuition for which distrib
     display: grid;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
-    background: rgba(220, 38, 38, 0.05);
+    background: rgba(255, 149, 0, 0.05);
     padding: 1.5rem;
     border-radius: 8px;
-    border: 1px solid rgba(220, 38, 38, 0.2);
+    border: 1px solid rgba(255, 149, 0, 0.2);
 }
 
 .distribution-selector label {
@@ -728,7 +920,7 @@ This hands-on exploration is the best way to develop intuition for which distrib
     text-align: right;
     color: var(--color-accent);
     font-weight: bold;
-    background: rgba(220, 38, 38, 0.1);
+    background: rgba(255, 149, 0, 0.1);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     font-family: monospace;
@@ -759,7 +951,7 @@ This hands-on exploration is the best way to develop intuition for which distrib
 }
 
 .insights {
-    background: rgba(220, 38, 38, 0.05);
+    background: rgba(255, 149, 0, 0.05);
     padding: 1rem;
     border-radius: 6px;
     border-left: 4px solid var(--color-accent);
