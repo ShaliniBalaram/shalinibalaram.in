@@ -23,10 +23,13 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 <Layout>
   <Header />
   <main id="main-content" data-layout="index">
-    <section id="hero" class="pt-8 pb-6">
+    <section id="hero" class="pt-8 pb-6 relative">
+      <div class="hero-waves absolute inset-0 opacity-10 pointer-events-none"></div>
+      <div class="relative z-10">
       <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Hello, I'm Shalini B
+        Hello, I'm Dr Shalini B
       </h1>
+      <p class="text-xl text-accent font-semibold mb-4">💧 Water Resources Engineer & Researcher</p>
       <a
         target="_blank"
         href="/rss.xml"
@@ -68,6 +71,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
           </div>
         )
       }
+      </div>
     </section>
 
     <Hr />
