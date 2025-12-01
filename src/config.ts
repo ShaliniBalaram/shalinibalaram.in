@@ -1,9 +1,9 @@
 export const SITE = {
   website: "https://shalinibalaram.in/", // your custom domain
-  author: "Shalini B",
+  author: "Dr Shalini B",
   profile: "https://shalinibalaram.in/",
-  desc: "Personal website of Shalini B - Civil Engineer & Water Resources Researcher",
-  title: "Shalini B",
+  desc: "Water Resources Engineer & Researcher | Exploring hydrology, statistics, and sustainable water management",
+  title: "Dr Shalini B",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerIndex: 4,
