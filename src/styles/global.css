@@ -4,28 +4,34 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root,
-html[data-theme="light"] {
-  --background: #ffffff;
-  --foreground: #1e3a5f;
-  --accent: #0891b2;
-  --muted: #e0f2fe;
-  --border: #7dd3fc;
+html[data-theme="dark"] {
+  --background: #0f172a;
+  --foreground: #e2e8f0;
+  --accent: #fbbf24;
+  --accent-secondary: #38bdf8;
+  --muted: #1e293b;
+  --border: #334155;
+  --card-bg: #1e293b;
 }
 
-html[data-theme="dark"] {
-  --background: #0c1e2e;
-  --foreground: #e0f2fe;
-  --accent: #22d3ee;
-  --muted: #1e3a5f;
-  --border: #0891b2;
+html[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --accent: #f59e0b;
+  --accent-secondary: #0ea5e9;
+  --muted: #f1f5f9;
+  --border: #e2e8f0;
+  --card-bg: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-card-bg: var(--card-bg);
 }
 
 @layer base {
@@ -38,11 +44,14 @@ html[data-theme="dark"] {
     @apply overflow-y-scroll scroll-smooth;
   }
   body {
-    @apply flex min-h-svh flex-col font-mono text-foreground selection:bg-accent/75 selection:text-background;
-    background: linear-gradient(to bottom, #ffffff 0%, #f0f9ff 100%);
+    @apply flex min-h-svh flex-col font-mono text-foreground selection:bg-accent/30 selection:text-foreground;
+    background: var(--color-background);
   }
   html[data-theme="dark"] body {
-    background: linear-gradient(to bottom, #0c1e2e 0%, #1e3a5f 100%);
+    background: linear-gradient(to bottom, #0f172a 0%, #1e293b 100%);
+  }
+  html[data-theme="light"] body {
+    background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
   }
   a,
   button {
@@ -66,39 +75,30 @@ html[data-theme="dark"] {
   @apply underline decoration-wavy decoration-2 underline-offset-4;
 }
 
-/* Water-themed wave background */
-.hero-waves {
-  background:
-    linear-gradient(135deg, transparent 0%, transparent 48%, var(--color-accent) 48%, var(--color-accent) 52%, transparent 52%),
-    linear-gradient(45deg, transparent 0%, transparent 48%, var(--color-muted) 48%, var(--color-muted) 52%, transparent 52%);
-  background-size: 60px 60px;
-  background-position: 0 0, 30px 30px;
-  animation: wave-flow 20s linear infinite;
+/* Subtle gradient accent background */
+.hero-gradient {
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes wave-flow {
-  0% {
-    background-position: 0 0, 30px 30px;
-  }
-  100% {
-    background-position: 60px 60px, 90px 90px;
-  }
-}
-
-/* Water droplet decorative elements */
-body::before {
+.hero-gradient::before {
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background:
-    radial-gradient(circle at 20% 50%, rgba(8, 145, 178, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(34, 211, 238, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(125, 211, 252, 0.03) 0%, transparent 50%);
+    radial-gradient(circle at 20% 50%, rgba(251, 191, 36, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
+}
+
+html[data-theme="light"] .hero-gradient::before {
+  background:
+    radial-gradient(circle at 20% 50%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.06) 0%, transparent 50%);
 }
 
 /* Ensure content stays above background */
@@ -107,59 +107,38 @@ header, main, footer {
   z-index: 1;
 }
 
-/* Subtle wave border for sections */
+/* Subtle divider for sections */
 section {
   position: relative;
 }
 
-section::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg,
-    transparent,
-    var(--color-accent) 25%,
-    var(--color-accent) 75%,
-    transparent
-  );
-  opacity: 0.2;
-}
-
-/* Remove border from hero section */
-#hero::after {
-  display: none;
-}
-
-/* Water droplet icon animation */
-.water-icon {
+/* Tech icon animation */
+.tech-icon {
   display: inline-block;
-  animation: water-drop 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
 }
 
-@keyframes water-drop {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-5px) scale(1.1);
-  }
+.tech-icon:hover {
+  transform: scale(1.1) rotate(5deg);
 }
 
 /* Expertise badges */
 .expertise-badge {
   display: inline-block;
-  padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, var(--color-muted) 0%, var(--color-border) 100%);
-  color: var(--color-accent);
+  padding: 0.625rem 1.25rem;
+  background: var(--color-muted);
+  color: var(--color-foreground);
   font-weight: 600;
   font-size: 0.875rem;
-  border-radius: 9999px;
-  border: 2px solid var(--color-border);
-  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   animation: fade-in-up 0.6s ease-out backwards;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+html[data-theme="dark"] .expertise-badge {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
 }
 
 .expertise-badge:nth-child(1) { animation-delay: 0.1s; }
@@ -170,10 +149,15 @@ section::after {
 .expertise-badge:nth-child(6) { animation-delay: 0.6s; }
 
 .expertise-badge:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 25px rgba(8, 145, 178, 0.3);
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-border) 100%);
-  color: white;
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 12px 0 rgb(251 191 36 / 0.2);
+  background: var(--color-accent);
+  color: var(--color-background);
+}
+
+html[data-theme="dark"] .expertise-badge:hover {
+  box-shadow: 0 4px 12px 0 rgb(251 191 36 / 0.3);
 }
 
 @keyframes fade-in-up {
