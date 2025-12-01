@@ -441,7 +441,7 @@ Understanding fat tails isn't just about better statistics—it's about survivin
 
 *Have you encountered fat tails in your work? Especially in water resources or environmental engineering? I'd love to hear about it. Feel free to reach out!*
 
-<script is:inline data-astro-rerun>
+<script>
 (function() {
     // Helper functions
     function gaussianRandom(mean = 0, stdev = 1) {

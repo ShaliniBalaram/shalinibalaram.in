@@ -308,7 +308,7 @@ Now that you understand the theory, let's explore these distributions hands-on! 
 
 This hands-on exploration is the best way to develop intuition for which distribution fits your data!
 
-<script is:inline data-astro-rerun>
+<script>
 // Mini plot drawing functions
 function drawMiniPlot(canvasId, type, distribution, params) {
     const canvas = document.getElementById(canvasId);
@@ -452,7 +452,7 @@ if (document.readyState === 'loading') {
 document.addEventListener('astro:page-load', initMiniPlots);
 </script>
 
-<script is:inline data-astro-rerun>
+<script>
 (function() {
     function initializeWhenReady() {
         console.log('Attempting to initialize distribution plots...');
