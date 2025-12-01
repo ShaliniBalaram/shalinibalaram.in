@@ -583,10 +583,10 @@ Understanding fat tails isn't just about better statistics—it's about survivin
             resultDiv.innerHTML = `
 <div class="result-box mediocristan">
 <h4>Mediocristan (Gaussian) Result:</h4>
-<p><strong>Two 3σ events:</strong> P(X > 3σ)² = ${(p3sigma * p3sigma).toExponential(3)}</p>
-<p><strong>One 6σ event:</strong> P(X > 6σ) = ${p6sigma.toExponential(3)}</p>
+<p><strong>Two 3σ events:</strong> P(X &gt; 3σ)² = ${(p3sigma * p3sigma).toExponential(3)}</p>
+<p><strong>One 6σ event:</strong> P(X &gt; 6σ) = ${p6sigma.toExponential(3)}</p>
 <p class="conclusion">
-<strong>Ratio: ${ratio.toFixed(0):1}</strong><br>
+<strong>Ratio: ${ratio.toFixed(0)}</strong><br>
                         Two moderate events are <strong>${ratio.toFixed(0)}× more likely</strong> than one extreme event.
 <br><br>
 <em>→ Bad things happen from accumulation of many unlikely events.</em>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Simple Test</title></head>
+<body>
+<h1>Simple Canvas Test</h1>
+<canvas id="test" width="400" height="300" style="border: 1px solid black;"></canvas>
+<script>
+console.log('Script starting...');
+const canvas = document.getElementById('test');
+console.log('Canvas:', canvas);
+const ctx = canvas.getContext('2d');
+console.log('Context:', ctx);
+ctx.fillStyle = 'blue';
+ctx.fillRect(50, 50, 100, 100);
+console.log('Rectangle drawn');
+</script>
+</body>
+</html>
