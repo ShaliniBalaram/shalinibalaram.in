@@ -60,45 +60,45 @@ Let me show you this visually. The interactive plot below compares a Gaussian (M
 </div>
 
 <div id="mediocristan-extremistan-compare">
-  <div class="comparison-controls">
-    <h3>Mediocristan vs Extremistan: Interactive Comparison</h3>
+<div class="comparison-controls">
+<h3>Mediocristan vs Extremistan: Interactive Comparison</h3>
 
-    <div class="control-group">
-      <label>Number of samples: <span id="n-samples-display">1000</span></label>
-      <input type="range" id="n-samples" min="100" max="10000" step="100" value="1000" oninput="window.updateComparison()">
-    </div>
+<div class="control-group">
+<label>Number of samples: <span id="n-samples-display">1000</span></label>
+<input type="range" id="n-samples" min="100" max="10000" step="100" value="1000" oninput="window.updateComparison()">
+</div>
 
-    <div class="control-group">
-      <label>Pareto tail parameter α: <span id="alpha-display">1.5</span></label>
-      <input type="range" id="alpha-param" min="1.1" max="3.5" step="0.1" value="1.5" oninput="window.updateComparison()">
-      <small>Lower α = fatter tails (more extreme)</small>
-    </div>
+<div class="control-group">
+<label>Pareto tail parameter α: <span id="alpha-display">1.5</span></label>
+<input type="range" id="alpha-param" min="1.1" max="3.5" step="0.1" value="1.5" oninput="window.updateComparison()">
+<small>Lower α = fatter tails (more extreme)</small>
+</div>
 
-    <div class="stats-display" id="stats-comparison">
-      <!-- Stats will be populated by JavaScript -->
-    </div>
-  </div>
+<div class="stats-display" id="stats-comparison">
+<!-- Stats will be populated by JavaScript -->
+</div>
+</div>
 
-  <div class="plot-grid">
-    <div class="plot-item">
-      <h4>Gaussian (Mediocristan)</h4>
-      <canvas id="gaussian-compare" width="400" height="300"></canvas>
-    </div>
-    <div class="plot-item">
-      <h4>Pareto (Extremistan, α=<span id="alpha-display-2">1.5</span>)</h4>
-      <canvas id="pareto-compare" width="400" height="300"></canvas>
-    </div>
-  </div>
+<div class="plot-grid">
+<div class="plot-item">
+<h4>Gaussian (Mediocristan)</h4>
+<canvas id="gaussian-compare" width="400" height="300"></canvas>
+</div>
+<div class="plot-item">
+<h4>Pareto (Extremistan, α=<span id="alpha-display-2">1.5</span>)</h4>
+<canvas id="pareto-compare" width="400" height="300"></canvas>
+</div>
+</div>
 
-  <div class="insights-box">
-    <h4>💡 What to Notice:</h4>
-    <ul>
-      <li><strong>Gaussian</strong>: Most values cluster around the mean. Extreme deviations are extremely rare.</li>
-      <li><strong>Pareto</strong>: Many small values, but occasional HUGE spikes that dominate everything.</li>
-      <li><strong>Try lowering α</strong>: Watch how extreme events become more common and more extreme.</li>
-      <li><strong>Sample mean instability</strong>: The Pareto mean jumps around wildly - try refreshing!</li>
-    </ul>
-  </div>
+<div class="insights-box">
+<h4>💡 What to Notice:</h4>
+<ul>
+<li><strong>Gaussian</strong>: Most values cluster around the mean. Extreme deviations are extremely rare.</li>
+<li><strong>Pareto</strong>: Many small values, but occasional HUGE spikes that dominate everything.</li>
+<li><strong>Try lowering α</strong>: Watch how extreme events become more common and more extreme.</li>
+<li><strong>Sample mean instability</strong>: The Pareto mean jumps around wildly - try refreshing!</li>
+</ul>
+</div>
 </div>
 
 ## A Hydrology Wake-Up Call
@@ -146,25 +146,25 @@ This is why insurance can only work in Mediocristan. You should **never** write 
 ### Interactive Demonstration: The Catastrophe Principle
 
 <div id="catastrophe-demo">
-  <h3>Interactive Catastrophe Principle</h3>
-  <p>Question: To reach a total deviation of 6σ, what's more likely?</p>
+<h3>Interactive Catastrophe Principle</h3>
+<p>Question: To reach a total deviation of 6σ, what's more likely?</p>
 
-  <div class="demo-controls">
-    <div class="demo-option">
-      <input type="radio" name="disttype" id="gaussian-cat" value="gaussian" checked onchange="window.updateCatastrophe()">
-      <label for="gaussian-cat">Gaussian (Mediocristan)</label>
-    </div>
-    <div class="demo-option">
-      <input type="radio" name="disttype" id="pareto-cat" value="pareto" onchange="window.updateCatastrophe()">
-      <label for="pareto-cat">Pareto α=1.5 (Extremistan)</label>
-    </div>
-  </div>
+<div class="demo-controls">
+<div class="demo-option">
+<input type="radio" name="disttype" id="gaussian-cat" value="gaussian" checked onchange="window.updateCatastrophe()">
+<label for="gaussian-cat">Gaussian (Mediocristan)</label>
+</div>
+<div class="demo-option">
+<input type="radio" name="disttype" id="pareto-cat" value="pareto" onchange="window.updateCatastrophe()">
+<label for="pareto-cat">Pareto α=1.5 (Extremistan)</label>
+</div>
+</div>
 
-  <div class="result-display" id="catastrophe-result">
-    <!-- Results will be populated by JavaScript -->
-  </div>
+<div class="result-display" id="catastrophe-result">
+<!-- Results will be populated by JavaScript -->
+</div>
 
-  <canvas id="catastrophe-plot" width="600" height="300"></canvas>
+<canvas id="catastrophe-plot" width="600" height="300"></canvas>
 </div>
 
 ## When I Realized Everything Breaks
@@ -184,25 +184,25 @@ Yes, you read that right. One hundred billion observations.
 ### Sample Size Calculator: See For Yourself
 
 <div id="sample-size-calc">
-  <h3>Sample Size Requirements Calculator</h3>
+<h3>Sample Size Requirements Calculator</h3>
 
-  <div class="calc-control">
-    <label>Desired precision (% error): <span id="precision-display">5</span>%</label>
-    <input type="range" id="precision-slider" min="1" max="20" step="1" value="5" oninput="window.updateSampleCalc()">
-  </div>
+<div class="calc-control">
+<label>Desired precision (% error): <span id="precision-display">5</span>%</label>
+<input type="range" id="precision-slider" min="1" max="20" step="1" value="5" oninput="window.updateSampleCalc()">
+</div>
 
-  <div class="calc-control">
-    <label>Distribution tail parameter α: <span id="alpha-calc-display">2.0</span></label>
-    <input type="range" id="alpha-calc-slider" min="1.1" max="4.0" step="0.1" value="2.0" oninput="window.updateSampleCalc()">
-  </div>
+<div class="calc-control">
+<label>Distribution tail parameter α: <span id="alpha-calc-display">2.0</span></label>
+<input type="range" id="alpha-calc-slider" min="1.1" max="4.0" step="0.1" value="2.0" oninput="window.updateSampleCalc()">
+</div>
 
-  <div class="results-table" id="sample-calc-results">
-    <!-- Results table will be populated -->
-  </div>
+<div class="results-table" id="sample-calc-results">
+<!-- Results table will be populated -->
+</div>
 
-  <div class="insights-box">
-    <p><strong>Key insight:</strong> As α decreases (fatter tails), the required sample size explodes exponentially. For α=1.16 (the "80/20" Pareto), you need astronomically more data than for a Gaussian (α→∞).</p>
-  </div>
+<div class="insights-box">
+<p><strong>Key insight:</strong> As α decreases (fatter tails), the required sample size explodes exponentially. For α=1.16 (the "80/20" Pareto), you need astronomically more data than for a Gaussian (α→∞).</p>
+</div>
 </div>
 
 ### 2. The Sample Mean Lies
@@ -552,20 +552,20 @@ Understanding fat tails isn't just about better statistics—it's about survivin
         const paretoTop1Contribution = (paretoTop1Sum / paretoTotalSum * 100).toFixed(1);
 
         document.getElementById('stats-comparison').innerHTML = `
-            <div class="stat-row">
-                <div class="stat-item">
-                    <strong>Gaussian:</strong><br>
+<div class="stat-row">
+<div class="stat-item">
+<strong>Gaussian:</strong><br>
                     Max/Mean ratio: ${(gaussianMax / Math.abs(gaussianMean)).toFixed(2)}
-                </div>
-                <div class="stat-item">
-                    <strong>Pareto:</strong><br>
+</div>
+<div class="stat-item">
+<strong>Pareto:</strong><br>
                     Max/Mean ratio: ${(paretoMax / paretoMean).toFixed(2)}
-                </div>
-            </div>
-            <div class="stat-highlight">
-                <strong>Top 1% contribution to total:</strong> ${paretoTop1Contribution}%
-                <br><small>In Extremistan, a tiny fraction contributes most of the total!</small>
-            </div>
+</div>
+</div>
+<div class="stat-highlight">
+<strong>Top 1% contribution to total:</strong> ${paretoTop1Contribution}%
+<br><small>In Extremistan, a tiny fraction contributes most of the total!</small>
+</div>
         `;
     };
 
@@ -581,17 +581,17 @@ Understanding fat tails isn't just about better statistics—it's about survivin
             const ratio = (p3sigma * p3sigma) / p6sigma;
 
             resultDiv.innerHTML = `
-                <div class="result-box mediocristan">
-                    <h4>Mediocristan (Gaussian) Result:</h4>
-                    <p><strong>Two 3σ events:</strong> P(X > 3σ)² = ${(p3sigma * p3sigma).toExponential(3)}</p>
-                    <p><strong>One 6σ event:</strong> P(X > 6σ) = ${p6sigma.toExponential(3)}</p>
-                    <p class="conclusion">
-                        <strong>Ratio: ${ratio.toFixed(0):1}</strong><br>
+<div class="result-box mediocristan">
+<h4>Mediocristan (Gaussian) Result:</h4>
+<p><strong>Two 3σ events:</strong> P(X > 3σ)² = ${(p3sigma * p3sigma).toExponential(3)}</p>
+<p><strong>One 6σ event:</strong> P(X > 6σ) = ${p6sigma.toExponential(3)}</p>
+<p class="conclusion">
+<strong>Ratio: ${ratio.toFixed(0):1}</strong><br>
                         Two moderate events are <strong>${ratio.toFixed(0)}× more likely</strong> than one extreme event.
-                        <br><br>
-                        <em>→ Bad things happen from accumulation of many unlikely events.</em>
-                    </p>
-                </div>
+<br><br>
+<em>→ Bad things happen from accumulation of many unlikely events.</em>
+</p>
+</div>
             `;
         } else {
             // Pareto: opposite result
@@ -603,17 +603,17 @@ Understanding fat tails isn't just about better statistics—it's about survivin
             const ratio = p6 / (p3 * p3);
 
             resultDiv.innerHTML = `
-                <div class="result-box extremistan">
-                    <h4>Extremistan (Pareto α=1.5) Result:</h4>
-                    <p><strong>Two 3× events:</strong> P(X > 3)² = ${(p3 * p3).toFixed(4)}</p>
-                    <p><strong>One 6× event:</strong> P(X > 6) = ${p6.toFixed(4)}</p>
-                    <p class="conclusion">
-                        <strong>Ratio: ${ratio.toFixed(2)}:1</strong><br>
+<div class="result-box extremistan">
+<h4>Extremistan (Pareto α=1.5) Result:</h4>
+<p><strong>Two 3× events:</strong> P(X > 3)² = ${(p3 * p3).toFixed(4)}</p>
+<p><strong>One 6× event:</strong> P(X > 6) = ${p6.toFixed(4)}</p>
+<p class="conclusion">
+<strong>Ratio: ${ratio.toFixed(2)}:1</strong><br>
                         One extreme event is <strong>${ratio.toFixed(2)}× more likely</strong> than two moderate events!
-                        <br><br>
-                        <em>→ Bad things happen from a SINGLE catastrophic event.</em>
-                    </p>
-                </div>
+<br><br>
+<em>→ Bad things happen from a SINGLE catastrophic event.</em>
+</p>
+</div>
             `;
         }
     };

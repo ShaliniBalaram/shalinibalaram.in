@@ -68,14 +68,14 @@ For a standard normal distribution (μ=0, σ=1):
 
 **Visual Shape:**
 <div class="mini-plots">
-  <div class="mini-plot-container">
-    <h4>PDF (Probability Density)</h4>
-    <canvas id="normal-pdf-mini" width="200" height="120"></canvas>
-  </div>
-  <div class="mini-plot-container">
-    <h4>CDF (Cumulative Distribution)</h4>
-    <canvas id="normal-cdf-mini" width="200" height="120"></canvas>
-  </div>
+<div class="mini-plot-container">
+<h4>PDF (Probability Density)</h4>
+<canvas id="normal-pdf-mini" width="200" height="120"></canvas>
+</div>
+<div class="mini-plot-container">
+<h4>CDF (Cumulative Distribution)</h4>
+<canvas id="normal-cdf-mini" width="200" height="120"></canvas>
+</div>
 </div>
 
 **Example scenarios:**
@@ -121,14 +121,14 @@ For an exponential distribution with λ=1:
 
 **Visual Shape:**
 <div class="mini-plots">
-  <div class="mini-plot-container">
-    <h4>PDF (Exponential Decay)</h4>
-    <canvas id="exponential-pdf-mini" width="200" height="120"></canvas>
-  </div>
-  <div class="mini-plot-container">
-    <h4>CDF (Rising Curve)</h4>
-    <canvas id="exponential-cdf-mini" width="200" height="120"></canvas>
-  </div>
+<div class="mini-plot-container">
+<h4>PDF (Exponential Decay)</h4>
+<canvas id="exponential-pdf-mini" width="200" height="120"></canvas>
+</div>
+<div class="mini-plot-container">
+<h4>CDF (Rising Curve)</h4>
+<canvas id="exponential-cdf-mini" width="200" height="120"></canvas>
+</div>
 </div>
 
 **Example scenarios:**
@@ -172,14 +172,14 @@ For a Weibull distribution with k=2, λ=1 (Rayleigh distribution):
 
 **Visual Shape:**
 <div class="mini-plots">
-  <div class="mini-plot-container">
-    <h4>PDF (Rayleigh k=2)</h4>
-    <canvas id="weibull-pdf-mini" width="200" height="120"></canvas>
-  </div>
-  <div class="mini-plot-container">
-    <h4>CDF (S-shaped)</h4>
-    <canvas id="weibull-cdf-mini" width="200" height="120"></canvas>
-  </div>
+<div class="mini-plot-container">
+<h4>PDF (Rayleigh k=2)</h4>
+<canvas id="weibull-pdf-mini" width="200" height="120"></canvas>
+</div>
+<div class="mini-plot-container">
+<h4>CDF (S-shaped)</h4>
+<canvas id="weibull-cdf-mini" width="200" height="120"></canvas>
+</div>
 </div>
 
 **Example scenarios:**
@@ -224,14 +224,14 @@ For a gamma distribution with α=2, β=1:
 
 **Visual Shape:**
 <div class="mini-plots">
-  <div class="mini-plot-container">
-    <h4>PDF (Right-skewed)</h4>
-    <canvas id="gamma-pdf-mini" width="200" height="120"></canvas>
-  </div>
-  <div class="mini-plot-container">
-    <h4>CDF (Smooth Rise)</h4>
-    <canvas id="gamma-cdf-mini" width="200" height="120"></canvas>
-  </div>
+<div class="mini-plot-container">
+<h4>PDF (Right-skewed)</h4>
+<canvas id="gamma-pdf-mini" width="200" height="120"></canvas>
+</div>
+<div class="mini-plot-container">
+<h4>CDF (Smooth Rise)</h4>
+<canvas id="gamma-cdf-mini" width="200" height="120"></canvas>
+</div>
 </div>
 
 **Example scenarios:**
@@ -273,31 +273,31 @@ Now that you understand the theory, let's explore these distributions hands-on! 
 </div>
 
 <div id="distribution-explorer">
-  <div class="controls-panel">
-    <h3>Interactive Distribution Explorer</h3>
+<div class="controls-panel">
+<h3>Interactive Distribution Explorer</h3>
 
-    <div class="distribution-selector">
-      <label>Choose Distribution:</label>
-      <select id="distribution-type" onchange="window.switchDistribution()">
-        <option value="normal">Normal Distribution</option>
-        <option value="exponential">Exponential Distribution</option>
-        <option value="weibull">Weibull Distribution</option>
-        <option value="gamma">Gamma Distribution</option>
-      </select>
-    </div>
+<div class="distribution-selector">
+<label>Choose Distribution:</label>
+<select id="distribution-type" onchange="window.switchDistribution()">
+<option value="normal">Normal Distribution</option>
+<option value="exponential">Exponential Distribution</option>
+<option value="weibull">Weibull Distribution</option>
+<option value="gamma">Gamma Distribution</option>
+</select>
+</div>
 
-    <div class="parameter-controls" id="param-controls">
-      <!-- Parameters will be populated by JavaScript -->
-    </div>
-  </div>
+<div class="parameter-controls" id="param-controls">
+<!-- Parameters will be populated by JavaScript -->
+</div>
+</div>
 
-  <div class="equation-display" id="equation-display">
-    <!-- Equation will be displayed here -->
-  </div>
+<div class="equation-display" id="equation-display">
+<!-- Equation will be displayed here -->
+</div>
 
-  <div class="plot-container">
-    <canvas id="pdf-plot" width="600" height="400"></canvas>
-  </div>
+<div class="plot-container">
+<canvas id="pdf-plot" width="600" height="400"></canvas>
+</div>
 </div>
 
 **Try this:**
@@ -678,43 +678,43 @@ document.addEventListener('astro:page-load', initMiniPlots);
 
                 if (dist === 'normal') {
                     controlsHTML = `
-                        <div class="param-control">
-                            <label>μ (Mean): <span id="mu-value">${params.mu}</span></label>
-                            <input type="range" id="mu-slider" min="-3" max="3" step="0.1" value="${params.mu}" oninput="window.updatePlot()">
-                        </div>
-                        <div class="param-control">
-                            <label>σ (Std Dev): <span id="sigma-value">${params.sigma}</span></label>
-                            <input type="range" id="sigma-slider" min="0.1" max="2.5" step="0.1" value="${params.sigma}" oninput="window.updatePlot()">
-                        </div>
+<div class="param-control">
+<label>μ (Mean): <span id="mu-value">${params.mu}</span></label>
+<input type="range" id="mu-slider" min="-3" max="3" step="0.1" value="${params.mu}" oninput="window.updatePlot()">
+</div>
+<div class="param-control">
+<label>σ (Std Dev): <span id="sigma-value">${params.sigma}</span></label>
+<input type="range" id="sigma-slider" min="0.1" max="2.5" step="0.1" value="${params.sigma}" oninput="window.updatePlot()">
+</div>
                     `;
                 } else if (dist === 'exponential') {
                     controlsHTML = `
-                        <div class="param-control">
-                            <label>λ (Rate): <span id="lambda-value">${params.lambda}</span></label>
-                            <input type="range" id="lambda-slider" min="0.1" max="3" step="0.1" value="${params.lambda}" oninput="window.updatePlot()">
-                        </div>
+<div class="param-control">
+<label>λ (Rate): <span id="lambda-value">${params.lambda}</span></label>
+<input type="range" id="lambda-slider" min="0.1" max="3" step="0.1" value="${params.lambda}" oninput="window.updatePlot()">
+</div>
                     `;
                 } else if (dist === 'weibull') {
                     controlsHTML = `
-                        <div class="param-control">
-                            <label>k (Shape): <span id="k-value">${params.k}</span></label>
-                            <input type="range" id="k-slider" min="0.5" max="4" step="0.1" value="${params.k}" oninput="window.updatePlot()">
-                        </div>
-                        <div class="param-control">
-                            <label>λ (Scale): <span id="lambda-value">${params.lambda}</span></label>
-                            <input type="range" id="lambda-slider" min="0.5" max="2" step="0.1" value="${params.lambda}" oninput="window.updatePlot()">
-                        </div>
+<div class="param-control">
+<label>k (Shape): <span id="k-value">${params.k}</span></label>
+<input type="range" id="k-slider" min="0.5" max="4" step="0.1" value="${params.k}" oninput="window.updatePlot()">
+</div>
+<div class="param-control">
+<label>λ (Scale): <span id="lambda-value">${params.lambda}</span></label>
+<input type="range" id="lambda-slider" min="0.5" max="2" step="0.1" value="${params.lambda}" oninput="window.updatePlot()">
+</div>
                     `;
                 } else if (dist === 'gamma') {
                     controlsHTML = `
-                        <div class="param-control">
-                            <label>α (Shape): <span id="alpha-value">${params.alpha}</span></label>
-                            <input type="range" id="alpha-slider" min="0.5" max="5" step="0.1" value="${params.alpha}" oninput="window.updatePlot()">
-                        </div>
-                        <div class="param-control">
-                            <label>β (Rate): <span id="beta-value">${params.beta}</span></label>
-                            <input type="range" id="beta-slider" min="0.1" max="3" step="0.1" value="${params.beta}" oninput="window.updatePlot()">
-                        </div>
+<div class="param-control">
+<label>α (Shape): <span id="alpha-value">${params.alpha}</span></label>
+<input type="range" id="alpha-slider" min="0.5" max="5" step="0.1" value="${params.alpha}" oninput="window.updatePlot()">
+</div>
+<div class="param-control">
+<label>β (Rate): <span id="beta-value">${params.beta}</span></label>
+<input type="range" id="beta-slider" min="0.1" max="3" step="0.1" value="${params.beta}" oninput="window.updatePlot()">
+</div>
                     `;
                 }
 
