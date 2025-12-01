@@ -18,19 +18,29 @@ const headerProps = {
 };
 ---
 
-<li class="my-6">
+<li class="my-6" data-card>
   <a
     href={getPath(id, filePath)}
-    class="inline-block text-lg font-medium text-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
+    class="block p-6 rounded-xl border-2 border-border bg-background hover:border-accent hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
   >
-    {
-      variant === "h2" ? (
-        <h2 {...headerProps}>{title}</h2>
-      ) : (
-        <h3 {...headerProps}>{title}</h3>
-      )
-    }
+    <div class="flex flex-col gap-3">
+      {
+        variant === "h2" ? (
+          <h2 class="text-xl font-bold text-foreground group-hover:text-accent transition-colors duration-300">
+            {title}
+          </h2>
+        ) : (
+          <h3 class="text-xl font-bold text-foreground group-hover:text-accent transition-colors duration-300">
+            {title}
+          </h3>
+        )
+      }
+      <Datetime {pubDatetime} {modDatetime} {timezone} />
+      <p class="text-base leading-relaxed">{description}</p>
+      <div class="mt-2 flex items-center gap-2 text-accent font-medium text-sm group-hover:gap-3 transition-all duration-300">
+        <span>Read more</span>
+        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+      </div>
+    </div>
   </a>
-  <Datetime {pubDatetime} {modDatetime} {timezone} />
-  <p>{description}</p>
 </li>

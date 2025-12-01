@@ -45,14 +45,26 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
         <span class="sr-only">RSS Feed</span>
       </a>
 
-      <p>
+      <p class="text-lg">
         I'm a civil engineer whose journey has been beautifully shaped by water. I hold a PhD from IIT Madras,
         an ME from UVCE, and a BE from BMSCE, all in civil engineering, with my masters and PhD specializing in water resources.
       </p>
-      <p class="mt-2">
+      <p class="mt-3 text-lg">
         I fell in love with hydrology when I realized I could actually understand and imagine what was happening in nature
         without overwhelming complexity. During my PhD, I also explored machine learning to understand water systems through data.
       </p>
+
+      <div class="mt-8 mb-6">
+        <h3 class="text-xl font-semibold mb-4 text-accent">Areas of Expertise</h3>
+        <div class="flex flex-wrap gap-3">
+          <span class="expertise-badge">Hydrology</span>
+          <span class="expertise-badge">Water Resources Management</span>
+          <span class="expertise-badge">Statistical Modeling</span>
+          <span class="expertise-badge">Machine Learning</span>
+          <span class="expertise-badge">Extreme Events Analysis</span>
+          <span class="expertise-badge">Data Science</span>
+        </div>
+      </div>
       <p class="mt-2">
         Learn more
         <LinkButton
