@@ -668,23 +668,31 @@ Understanding fat tails isn't just about better statistics—it's about survivin
 
     // Initialize all visualizations
     function initialize() {
+        console.log('Initialize function called');
         const statusDiv = document.getElementById('comparison-status');
         if (!statusDiv) {
+            console.log('Status div not found, retrying...');
             setTimeout(initialize, 100);
             return;
         }
 
+        console.log('Status div found, starting visualization initialization');
         try {
+            console.log('Calling updateComparison...');
             window.updateComparison();
+            console.log('Calling updateCatastrophe...');
             window.updateCatastrophe();
+            console.log('Calling updateSampleCalc...');
             window.updateSampleCalc();
 
+            console.log('All visualizations initialized successfully');
             statusDiv.innerHTML = '✅ Interactive visualizations ready! Adjust the parameters to explore.';
             statusDiv.style.background = '#d1fae5';
             statusDiv.style.borderColor = '#10b981';
             statusDiv.style.color = '#065f46';
         } catch (error) {
             console.error('Initialization error:', error);
+            console.error('Error stack:', error.stack);
             statusDiv.innerHTML = '❌ Error loading visualizations: ' + error.message;
             statusDiv.style.background = '#fee2e2';
             statusDiv.style.borderColor = '#ef4444';
