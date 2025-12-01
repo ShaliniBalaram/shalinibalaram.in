@@ -616,6 +616,62 @@ Understanding fat tails isn't just about better statistics—it's about survivin
 </div>
             `;
         }
+
+        // Draw visualization on canvas
+        const canvas = document.getElementById('catastrophe-plot');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw title
+            ctx.fillStyle = 'var(--color-foreground)';
+            ctx.font = '14px monospace';
+            ctx.fillText(distType === 'gaussian' ? 'Gaussian: Multiple events needed' : 'Pareto: Single event dominates', margin, margin - 10);
+
+            // Draw comparison bars
+            const barWidth = 80;
+            const barSpacing = 200;
+
+            if (distType === 'gaussian') {
+                // Two 3σ events
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(margin, margin + 50, barWidth, 100);
+                ctx.fillRect(margin + barWidth + 20, margin + 50, barWidth, 100);
+                ctx.fillStyle = 'var(--color-foreground)';
+                ctx.fillText('Two 3σ events', margin, margin + 170);
+                ctx.fillText('(More likely)', margin + 10, margin + 190);
+
+                // One 6σ event
+                ctx.fillStyle = '#ef4444';
+                ctx.globalAlpha = 0.3;
+                ctx.fillRect(margin + barSpacing, margin + 50, barWidth, 100);
+                ctx.globalAlpha = 1.0;
+                ctx.fillStyle = 'var(--color-foreground)';
+                ctx.fillText('One 6σ event', margin + barSpacing, margin + 170);
+                ctx.fillText('(Much less likely)', margin + barSpacing - 10, margin + 190);
+            } else {
+                // Two 3× events
+                ctx.fillStyle = '#3b82f6';
+                ctx.globalAlpha = 0.3;
+                ctx.fillRect(margin, margin + 50, barWidth, 100);
+                ctx.fillRect(margin + barWidth + 20, margin + 50, barWidth, 100);
+                ctx.globalAlpha = 1.0;
+                ctx.fillStyle = 'var(--color-foreground)';
+                ctx.fillText('Two 3× events', margin, margin + 170);
+                ctx.fillText('(Less likely)', margin + 10, margin + 190);
+
+                // One 6× event
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(margin + barSpacing, margin + 50, barWidth, 150);
+                ctx.fillStyle = 'var(--color-foreground)';
+                ctx.fillText('One 6× event', margin + barSpacing, margin + 220);
+                ctx.fillText('(More likely!)', margin + barSpacing + 5, margin + 240);
+            }
+        }
     };
 
     // Sample size calculator
