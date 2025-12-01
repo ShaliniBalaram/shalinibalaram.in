@@ -605,8 +605,8 @@ Understanding fat tails isn't just about better statistics—it's about survivin
             resultDiv.innerHTML = `
 <div class="result-box extremistan">
 <h4>Extremistan (Pareto α=1.5) Result:</h4>
-<p><strong>Two 3× events:</strong> P(X > 3)² = ${(p3 * p3).toFixed(4)}</p>
-<p><strong>One 6× event:</strong> P(X > 6) = ${p6.toFixed(4)}</p>
+<p><strong>Two 3× events:</strong> P(X &gt; 3)² = ${(p3 * p3).toFixed(4)}</p>
+<p><strong>One 6× event:</strong> P(X &gt; 6) = ${p6.toFixed(4)}</p>
 <p class="conclusion">
 <strong>Ratio: ${ratio.toFixed(2)}:1</strong><br>
                         One extreme event is <strong>${ratio.toFixed(2)}× more likely</strong> than two moderate events!
